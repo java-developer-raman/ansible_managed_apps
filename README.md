@@ -31,7 +31,8 @@ Whole project is divided into different roles. Let us start with describing each
   roles:
    - admin
   ```
-  If you will look it is using "administration" as hosts group. So all the hosts in inventory file with this group title will be  taken to create user. Since creating auser requires root permission that is why become is yes. This role has two yaml files user.yml and user-uninstall.yml. Please check user.yml to understand what it is doing.
+  If you will look it is using "administration" as hosts group. So all the hosts in inventory file with this group title will be  taken to create user. Since creating a user requires root permission that is why become is yes. This role has two yaml files user.yml and user-uninstall.yml. Please check user.yml to understand what it is doing. All the properties defined in __inventories/staging/group_vars/administration.yml__ will be used by user.yml scripts.
+  
 * __basic__
 
 This role can be used to install basic softwares e.g. vim, dnsutils and git. main.yml is importing the tasks from different independent yaml scripts responsible to perform the task.
