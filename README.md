@@ -35,8 +35,8 @@ Whole project is divided into different roles. Let us start with describing each
   
 * __basic__
 
-This role can be used to install basic softwares e.g. vim, dnsutils and git. main.yml is importing the tasks from different independent yaml scripts responsible to perform the task.
-Let us take an example of git.yml. This script first install GIT, And then setup github using public and private keys created through github. Both the public and private keys of your account should be available in __basic/files/github__ folder. I created these through instructions mentioned in this URL https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent. And then added public key to github account.
+  This role can be used to install basic softwares e.g. vim, dnsutils and git. main.yml is importing the tasks from different   independent yaml scripts responsible to perform the task.
+  Let us take an example of git.yml. This script first install GIT, And then setup github using public and private keys created   through github. Both the public and private keys of your account should be available in __basic/files/github__ folder. I created these through instructions mentioned in this URL https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent. And then added public key to github account.
 
 
 
