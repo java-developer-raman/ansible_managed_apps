@@ -1,0 +1,17 @@
+---
+
+- name: Herunterladen docker script
+  get_url:
+   url: 'https://get.docker.com/'
+   dest: "{{herunterladen_file}}"
+   mode: 0744
+
+- name: install docker
+  shell: "{{herunterladen_file}}"
+  become: yes
+  become_method: sudo
+
+- name: Remove temporary file
+  file:
+    path: "{{herunterladen_file}}"
+    state: absent

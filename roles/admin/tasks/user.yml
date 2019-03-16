@@ -1,0 +1,42 @@
+---
+# Step 1: Create User
+- name: Erstellen Sie neue User
+  user:
+   name: "{{user_name}}"
+   password: "{{user_password}}"
+   comment: 'Neue User für folgenden task'
+   groups: "{{ (user_groups | join(',')) }}"
+   create_home: yes
+   update_password: on_create
+   system: no # Default to no
+   shell: /bin/bash
+   state: present
+  become: yes
+
+# Step 2: Copy Public key of host machine into User's directory. So that it can be connected without providing password
+- name: Set authorized key taken from file
+  authorized_key:
+    user: "{{user_name}}"
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+# Step 3: Creating directory for Programs e.g. java
+# ein Programs Verzeichnis erstellen
+- name: "Erstellt Programs Directory"
+  file:
+   path: "{{programs_location}}"
+   mode: 0744
+   owner: "{{user_name}}"
+   group: "{{group_name}}"
+   state: directory
+
+# Step 3: Creating directory for Servers e.g. Tomcat
+# ein servers Verzeichnis erstellen
+- name: "Erstellt Server Directory"
+  file:
+   path: "{{servers_directory}}"
+   mode: 0744
+   owner: "{{user_name}}"
+   group: "{{group_name}}"
+   state: directory
+

@@ -1,0 +1,8 @@
+---
+# Will use all the properties defined in inventories/staging/group_vars/administration.yml file
+- name: Play book to setup/drop User
+  hosts: administration
+  become: yes
+  roles:
+   - admin
+

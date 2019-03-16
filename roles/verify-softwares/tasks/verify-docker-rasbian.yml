@@ -1,0 +1,8 @@
+---
+# Here we are ignoring any error came while invoking the command, and assume that software / Tool is not installed
+- name: Verify Docker
+  shell: docker --version
+  register: docker_version_command
+  become: yes
+  become_method: sudo
+  ignore_errors: True

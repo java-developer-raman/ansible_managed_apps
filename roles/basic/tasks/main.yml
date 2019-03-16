@@ -1,0 +1,25 @@
+---
+# importing all the independent tasks, ansible always look for main.yml file
+- import_tasks: vim.yml
+  tags: vim
+  when: operation == 'install' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: uninstall-vim.yml
+  tags: vim
+  when: operation == 'un-install' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: dnsutils.yml
+  tags: dnsutils
+  when: operation == 'install' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: uninstall-dnsutils.yml
+  tags: dnsutils
+  when: operation == 'un-install' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: git.yml
+  tags: git
+  when: operation == 'install' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: uninstall-git.yml
+  tags: git
+  when: operation == 'un-install' and ansible_facts['os_family'] == 'Debian'

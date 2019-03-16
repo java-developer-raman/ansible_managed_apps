@@ -1,0 +1,39 @@
+---
+
+- import_tasks: verify-tomcat.yml
+  tags: tomcat
+  when: operation == 'verify' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: verify-java.yml
+  tags: java
+  when: operation == 'verify' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: verify-docker-rasbian.yml
+  when: operation == 'verify' and ansible_lsb.id == 'Raspbian'
+
+- import_tasks: verify-vim.yml
+  tags: vim
+  when: operation == 'verify' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: verify-dnsutils.yml
+  tags: dnsutils
+  when: operation == 'verify' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: verify-git.yml
+  tags: git
+  when: operation == 'verify' and ansible_facts['os_family'] == 'Debian'
+
+# When task to get the version of software will fail, corresponding variable will be undefined, here we are checking if variable is undefined
+# then return "Not found" otherwise return the value of variable. I did it via ternary filter, and if else also. I kept if else just for my
+# notes to have an idea how it works.
+- name: Display all softwares 
+  debug:
+   msg:
+    - "git: {{ git_version_command | ternary(git_version_command.stdout, 'Git Not Found') }}"
+    - "vim: {{ vim_version_command | ternary(vim_version_command.stdout, 'Vim Not Found') }}"
+    - "dnsutils: {{ dnsutils_version_command | ternary(dnsutils_version_command.stdout, 'DnsUtils Not Found') }}"
+    - "java: {{ java_version_command | ternary(java_version_command.stdout, 'Java Not Found') }}"
+    - "docker: {{ docker_version_command | ternary(docker_version_command.stdout, 'Docker Not Found') }}"
+    - "tomcat: {{tomcat_version_command | ternary(tomcat_version_command.stdout, 'Tomcat Not Found')}}"
+  when: operation == 'verify'
+

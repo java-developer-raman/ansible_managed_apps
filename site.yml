@@ -1,0 +1,5 @@
+---
+- import_playbook: admin.yml
+  when: operation == 'setup' or operation == 'drop'
+- import_playbook: softwares.yml
+  when: operation == 'install' or operation == 'un-install' or operation == 'verify'

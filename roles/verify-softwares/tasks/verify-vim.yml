@@ -1,0 +1,8 @@
+---
+# Here we are ignoring any error came while invoking the command, and assume that software / Tool is not installed
+- name: "Verify Vim"
+  shell: apt-cache policy vim | head -2 | tail -1
+  register: vim_version_command
+  become: yes
+  become_method: sudo
+  ignore_errors: True

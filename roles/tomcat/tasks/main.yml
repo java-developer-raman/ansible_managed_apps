@@ -1,0 +1,9 @@
+---
+
+- import_tasks: tomcat.yml
+  tags: tomcat
+  when: operation == 'install' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: uninstall-tomcat.yml
+  tags: tomcat
+  when: operation == 'un-install' and ansible_facts['os_family'] == 'Debian'

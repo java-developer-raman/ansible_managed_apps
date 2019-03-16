@@ -1,0 +1,8 @@
+---
+# Tags can be used to execute a specific task e.g. ansible-playbook -i inventories/staging site.yml --tags vim --ask-sudo-pass --extra-vars "operation=install"
+# Here the task execution will be dependent upon operation i.e. if operation is install, install task will be executed and another one will be skipped
+
+- name: "Installing Vim"
+  apt: pkg=vim state=present
+  become: yes
+  become_method: sudo

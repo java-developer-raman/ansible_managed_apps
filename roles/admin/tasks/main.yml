@@ -1,0 +1,9 @@
+---
+# importing all the independent tasks, ansible always look for main.yml file
+- import_tasks: user.yml
+  tags: user
+  when: operation == 'setup' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: user-uninstall.yml
+  tags: user
+  when: operation == 'drop' and ansible_facts['os_family'] == 'Debian'

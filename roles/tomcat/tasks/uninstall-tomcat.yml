@@ -1,0 +1,41 @@
+---
+
+# Step 1: Stop Tomcat using systemctl service available in /etc/systemmd/system/tomcat.service
+- name: Stop Tomcat
+  service: name=tomcat state=stopped
+  become: yes
+  become_method: sudo
+
+# Step 2: Removing service file
+- name: Removing tomcat service for Rasbian
+  file:
+   path: /etc/systemd/system/tomcat.service
+   state: absent
+  become: yes
+  become_method: sudo
+  when: ansible_lsb.id == 'Raspbian'
+
+# Step 3: Removing tomcat init script. 
+- name: Removing tomcat startup script
+  file:
+   path: /etc/init.d/tomcat
+   state: absent
+  become: yes
+  become_method: sudo
+
+# Step 4: Removing Tomcat_home from .bashrc. 
+- name: "Removing TOMCAT_HOME from ~/.bashrc"
+  lineinfile:
+   path: ~/.bashrc
+   regexp: '^TOMCAT_HOME'
+   state: absent
+   backup: yes
+  notify:
+   - load environment
+
+# Step 5: Removing whole Tomcat Directory from .bashrc. 
+- name: "Removing Tomcat directory from system"
+  file:
+   path: "{{tomcat_home}}"
+   state: absent
+

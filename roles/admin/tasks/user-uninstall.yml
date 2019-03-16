@@ -1,0 +1,9 @@
+---
+
+- name: Loeschen Sie User
+  user:
+   name: "{{user_name}}"
+   remove: yes
+   force: yes
+   state: absent
+  become: yes

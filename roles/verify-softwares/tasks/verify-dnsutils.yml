@@ -1,0 +1,9 @@
+---
+# Here we are ignoring any error came while invoking the command, and assume that software / Tool is not installed
+- name: "Verify DnsUtils"
+  shell: apt-cache policy dnsutils | head -2 | tail -1
+  register: dnsutils_version_command
+  become: yes
+  become_method: sudo
+  ignore_errors: True
+

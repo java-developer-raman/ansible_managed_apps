@@ -1,0 +1,6 @@
+---
+
+- name: load environment
+  shell: source ~/.bashrc
+  args:
+     executable: /bin/bash

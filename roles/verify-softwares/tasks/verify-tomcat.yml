@@ -1,0 +1,7 @@
+---
+# Here we are ignoring any error came while invoking the command, and assume that software / Tool is not installed
+- name: "Checking Tomcat version"
+  shell: "{{tomcat_home}}/bin/version.sh | grep 'Server version'"
+  register: tomcat_version_command
+  ignore_errors: True
+

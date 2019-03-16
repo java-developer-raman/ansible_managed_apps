@@ -1,0 +1,12 @@
+---
+# Loading all the environment variables. 
+- name: load environment
+  shell: source ~/.bashrc
+  args:
+     executable: /bin/bash
+
+# Restart Tomcat
+- name: restart tomcat
+  service: name=tomcat state=restarted
+  become: yes
+  become_method: sudo

@@ -1,0 +1,23 @@
+---
+
+galaxy_info:
+  author: "Raman Sharma"
+  description: "Create and configure a user for SSH key based logins and passwordless sudo."
+  company: "Sharma corporation"
+  license:
+  min_ansible_version: "2.5"
+
+  platforms:
+    - name: "Ubuntu"
+      versions:
+        - "xenial"
+        - "bionic"
+    - name: "Debian"
+      versions:
+        - "rasberry pi"
+  galaxy_tags:
+    - "groups"
+    - "system"
+    - "users"
+
+dependencies: []

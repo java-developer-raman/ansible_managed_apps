@@ -1,0 +1,27 @@
+---
+# Tags can be used to execute a specific task e.g. ansible-playbook -i inventories/staging site.yml --tags git --ask-sudo-pass --extra-vars "operation=install"
+# Here the task execution will be dependent upon operation i.e. if operation is install, install task will be executed and another one will be skipped
+# Deleting gitconfig from User's home
+- name: "Löschen Sie gitconfig von User's home"
+  file:
+   path: ~/.gitconfig
+   state: absent
+
+# Deleting commands from bashrc.
+- name: "Löschen Sie ssh-agent commands von ~/.bashrc"
+  lineinfile:
+   path: ~/.bashrc
+   regexp: ^eval "\$\(ssh-agent -s\)";ssh-add ~/{{git_location}}/github
+   state: absent
+
+# Deleting directory containing git related files.
+- name: "Löschen Sie git Arbeitsverzeichnis"
+  file:
+   path: "~/{{git_location}}"
+   state: absent
+
+# Uninstalling GIT
+- name: "Un-Installing Git"
+  apt: pkg=git state=absent
+  become: yes
+  become_method: sudo

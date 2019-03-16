@@ -1,0 +1,48 @@
+---
+# Tags can be used to execute a specific task e.g. ansible-playbook -i inventories/staging site.yml --tags git --ask-sudo-pass --extra-vars "operation=install"
+# Here the task execution will be dependent upon operation i.e. if operation is install, install task will be executed and another one will be skipped
+
+# Step 1: Install GIT
+- name: "Installing Git"
+  apt: pkg=git state=present
+  become: yes
+  become_method: sudo
+
+# Step 2: Creating directory to copy ssh keys.
+- name: "Erstellen Sie git Arbeitsverzeichnis für ssh keys"
+  file:
+   path: "~/{{git_location}}"
+   mode: 0744
+   owner: raman
+   group: raman
+   state: directory
+
+# Step 3: Copying Private ssh keys on host. Directory should have minimum permissions
+- name: "Einfügen Sie git Private ssh key zu git Arbeitsverzeichnis"
+  copy:
+   src: github/github
+   dest: "~/{{git_location}}/github"
+   mode: 0700
+
+# Step 4: Copying Public ssh keys on host. Directory should have minimum permissions
+- name: "Einfügen Sie git Public ssh key zu git Arbeitsverzeichnis"
+  copy:
+   src: github/github.pub
+   dest: "~/{{git_location}}/github.pub"
+   mode: 0700
+
+# Step 5: Adding commands in bashrc to add private key in ssh agent, When ever someone logs in commands will be executed.
+- name: "Einfügen Sie commands in ~/.bashrc für ssh-agent"
+  lineinfile:
+   path: ~/.bashrc
+   regexp: ^eval "\$\(ssh-agent -s\)";ssh-add ~/{{git_location}}/github
+   line: eval "$(ssh-agent -s)";ssh-add ~/{{git_location}}/github
+   insertafter: EOF
+
+# Step 6: Copying git config into user's home.
+- name: Copy gitconfig zu home verzeichnis
+  copy:
+   src: github/.gitconfig
+   dest: ~/.gitconfig
+   mode: 0700
+

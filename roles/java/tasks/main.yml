@@ -1,0 +1,9 @@
+---
+
+- import_tasks: java.yml
+  tags: java
+  when: operation == 'install' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: uninstall-java.yml
+  tags: java
+  when: operation == 'un-install' and ansible_facts['os_family'] == 'Debian'

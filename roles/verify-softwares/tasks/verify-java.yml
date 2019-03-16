@@ -1,0 +1,6 @@
+---
+# Here we are ignoring any error came while invoking the command, and assume that software / Tool is not installed
+- name: "Überprüfen Sie aktuell java version"
+  shell: java -version 2>&1 | grep version | awk '{print $3}' | sed 's/"//g'
+  register: java_version_command
+  ignore_errors: True

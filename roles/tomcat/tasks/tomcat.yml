@@ -1,0 +1,77 @@
+---
+
+# Step 1: Herunterladen Sie Tomcat zip von Internet, 512 sha checksum wir pruefen 
+- name: "Herunterladen Tomcat von Internet, wenn nicht besteht"
+  get_url:
+   url: "{{tomcat_herunterladen_url}}"
+   dest: "{{herunterladen_folder}}/{{tomcat_archiv_name}}"
+   mode: 0744
+   checksum: "sha512:{{tomcat_herunterladen_url_sha}}"
+
+# Step 2: Extracting tomcat
+- name: "Tomcat Archiv extrahieren"
+  unarchive:
+   src: "{{herunterladen_folder}}/{{tomcat_archiv_name}}"
+   dest: "{{servers_directory}}"
+   remote_src: yes
+   group: "{{user_name}}"
+   owner: "{{group_name}}"
+   mode: 0744
+   creates: "{{tomcat_home}}"
+
+# Step 3: Setzen Sie environment variable TOMCAT_HOME
+- name: "Einfügen Sie tomcat_home in ~/.bashrc"
+  lineinfile:
+   path: ~/.bashrc
+   regexp: '^TOMCAT_HOME'
+   line: "TOMCAT_HOME={{tomcat_home}}"
+   backup: yes
+   insertafter: EOF
+
+# Step 4: Copy SSL certificates
+- name: Copy SSL certificates
+  copy: src=.keystore dest="{{tomcat_home}}/conf/" mode=0644
+
+# Step 4: Configure Tomcat server
+- name: Configure Tomcat server
+  template: src=server.xml dest="{{tomcat_home}}/conf/"
+  notify: restart tomcat
+
+# Step 5: Configure Tomcat users
+- name: Configure Tomcat users
+  template: src=tomcat-users.xml dest="{{tomcat_home}}/conf/"
+  notify: restart tomcat
+
+# Step 6: Create intermediate directories.
+- name: Create Catalina direcroy for manager
+  file: 
+   path: "{{tomcat_home}}/conf/Catalina/localhost/"
+   state: directory
+
+# Step 7: To access tomcat manager from remote machines.
+- name: Copy Manager xml
+  copy: src=manager.xml dest="{{tomcat_home}}/conf/Catalina/localhost/manager.xml" mode=0644
+  when: allow_remote_manager_access
+
+# Step 8: Create tomcat startup script, All the variables in template file will be replaced and ansible. 
+- name: Create tomcat startup script
+  template: src=tomcat-initscript.sh dest="/etc/init.d/tomcat" mode=0755
+  become: yes
+  become_method: sudo
+
+# Step 9: Create tomcat service, this step is only for rasbian, for other operating system it will be different.
+- name: Create tomcat service for Rasbian
+  copy: src=tomcat.service dest=/etc/systemd/system/ mode=0644
+  become: yes
+  become_method: sudo
+  when: ansible_lsb.id == 'Raspbian'
+
+# Step 10: Start Tomcat using normal shell command
+- name: Start Tomcat
+  service: name=tomcat state=started daemon_reload=yes
+  become: yes
+  become_method: sudo
+
+# Step 11: Wait for Tomcat to start
+- name: wait for tomcat to start
+  wait_for: port={{tomcat_http_port}}

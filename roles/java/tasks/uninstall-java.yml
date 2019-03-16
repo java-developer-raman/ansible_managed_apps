@@ -1,0 +1,47 @@
+---
+
+- name: "Überprüfen Sie aktuell java version"
+  shell: java -version 2>&1 | grep version | awk '{print $3}' | sed 's/"//g'
+  register: java_version_command
+
+- name: Setzen Sie java version als fact
+  set_fact:
+   aktuell_java_version_zu_loeschen: "{{java_version_command.stdout}}"
+
+- debug:
+   msg: "{{'Löschen Sie aktuell java version ' + aktuell_java_version_zu_loeschen if aktuell_java_version_zu_loeschen == erwartet_java_version else 'Aktuell java auf host ist nicht ' + erwartet_java_version + ' deswegen löschen wir nicht'}}"
+
+- name: "Löschen Sie javac als default"
+  shell: update-alternatives --remove javac "{{java_home}}/bin/javac"
+  become: yes
+  when: aktuell_java_version_zu_loeschen == erwartet_java_version
+
+- name: "Löschen Sie java als default"
+  shell: update-alternatives --remove java "{{java_home}}/bin/java"
+  become: yes
+  when: aktuell_java_version_zu_loeschen == erwartet_java_version
+
+- name: "Löschen Sie PATH von ~/.bashrc"
+  lineinfile:
+   path: ~/.bashrc
+   regexp: '^PATH=\$JAVA_HOME/bin:\$PATH'
+   state: absent
+  when: aktuell_java_version_zu_loeschen == erwartet_java_version
+
+- name: "Löschen Sie JAVA_HOME von ~/.bashrc"
+  lineinfile:
+   path: ~/.bashrc
+   regexp: '^JAVA_HOME'
+   state: absent
+   backup: yes
+  notify:
+   - load environment
+  when: aktuell_java_version_zu_loeschen == erwartet_java_version
+
+- name: "Löschen Sie Java Directory"
+  file:
+   path: "{{java_home}}"
+   state: absent
+  when: aktuell_java_version_zu_loeschen == erwartet_java_version
+
+

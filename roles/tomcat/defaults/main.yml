@@ -1,0 +1,16 @@
+---
+
+tomcat_herunterladen_url: http://mirrors.ae-online.de/apache/tomcat/tomcat-9/v9.0.16/bin/apache-tomcat-9.0.16.tar.gz
+tomcat_herunterladen_url_sha: 3e398e2343d1afc16a5f0cbfa8516db9db59ea8686d7d817eafa11c1465b71b711ccb2cae8437d5c32442b3a3f6cd3dbf15285eb35a28fcdb42c19793e0ff64e
+tomcat_archiv_name: apache-tomcat-9.0.16.tar.gz
+
+# tomcat base Verzeichnis
+tomcat_home: "{{servers_directory}}/apache-tomcat-9.0.16"
+
+tomcat_http_port: 8080
+tomcat_https_port: 8443
+
+# This will configure a default manager-gui user:
+
+tomcat_admin_username: admin
+allow_remote_manager_access: true
