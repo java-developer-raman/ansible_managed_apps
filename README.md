@@ -16,7 +16,7 @@ I have made my ansible project based upon standard directory structure as sugges
    **ansible-playbook -i inventories/staging site.yml --extra-vars "operation=un-install" --ask-become-pass**
 1. Install a particular software (e.g. GIT)
    
-   **ansible-playbook -i inventories/staging site.yml --tags "git" --extra-vars "operation=install" --ask-become-pass**
+   **ansible-playbook -i inventories/staging site.yml --tags "git" --extra-vars "operation=install" --ask-become-pass --ask-vault-pass**
 
 Whole project is divided into different roles. Let us start with describing each role in detail:
 * __admin__
@@ -49,6 +49,12 @@ This role can be used to install or un install tomcat from remote machine.
 5. Then tomcat will be started
 6. And a task will wait until it is not available.
 7. AT last handlers from handler fiolder will be invoked to restart the tomcat if required when any change in template files is detected.
+8. I have used ansible vault to encrypt the tomcat password "admin".
+   some of the web pages to understand how it works
+   https://serversforhackers.com/c/how-ansible-vault-works
+   https://www.digitalocean.com/community/tutorials/how-to-use-vault-to-protect-sensitive-ansible-data-on-ubuntu-16-04
+   https://docs.ansible.com/ansible/latest/user_guide/vault.html
+
 
 * __verify-softwares__
 
@@ -57,7 +63,6 @@ I created this role just to check the versions of installed softwares. Or check 
 * __Trobleshooting__
 
 1. Since for each task ansible creates a new ssh task. So I have noticed that if you have shell script was not working as desired especially grep commands in shell script. So that is why I created a service file which invoke tomcat-init script.
-
 
 
   
