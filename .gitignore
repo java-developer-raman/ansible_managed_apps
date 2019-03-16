@@ -1,1 +1,2 @@
-roles/basic/files/**/*
+roles/basic/files/github/github
+roles/basic/files/github/github.pub
