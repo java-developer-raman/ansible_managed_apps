@@ -1,5 +1,6 @@
 [softwares]
 raman@192.168.2.108
+#127.0.0.1 ansible_connection=local
 
 [administration]
 pi@192.168.2.108
