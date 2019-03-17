@@ -1,0 +1,27 @@
+---
+
+- name: "Sonar Archiv extrahieren"
+  unarchive:
+   src: "{{herunterladen_sonar_url}}"
+   dest: "{{programs_location}}"
+   remote_src: yes
+   group: "{{group_name}}"
+   owner: "{{user_name}}"
+   mode: 0744
+   creates: "{{sonar_home}}"
+   validate_certs: yes
+
+- name: "Einfügen Sie SONAR_HOME in ~/.bashrc"
+  lineinfile:
+   path: ~/.bashrc
+   regexp: '^SONAR_HOME'
+   line: "SONAR_HOME={{sonar_home}}"
+   backup: yes
+   insertafter: EOF
+
+- name: "Einfügen Sie PATH in ~/.bashrc"
+  lineinfile:
+   path: ~/.bashrc
+   regexp: '^PATH=\$SONAR_HOME'
+   line: "PATH=$SONAR_HOME/{{sonar_executable_path}}:$PATH"
+   insertafter: EOF

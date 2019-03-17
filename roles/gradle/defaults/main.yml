@@ -1,0 +1,2 @@
+herunterladen_gradle_url: https://services.gradle.org/distributions/gradle-5.2.1-bin.zip
+gradle_home: "{{programs_location}}/gradle-5.2.1"

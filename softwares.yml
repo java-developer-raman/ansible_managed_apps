@@ -7,6 +7,8 @@
    - role: docker
    - role: java
    - role: tomcat
+   - role: sonar-qube
+   - role: gradle
    - role: verify-softwares
 
 

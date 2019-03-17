@@ -1,0 +1,20 @@
+---
+
+- name: "Löschen Sie PATH von ~/.bashrc"
+  lineinfile:
+   path: ~/.bashrc
+   regexp: '^PATH=\$GRADLE_HOME/bin:\$PATH'
+   state: absent
+
+- name: "Löschen Sie GRADLE_HOME von ~/.bashrc"
+  lineinfile:
+   path: ~/.bashrc
+   regexp: '^GRADLE_HOME'
+   state: absent
+   backup: yes
+
+- name: "Löschen Sie Gradle Directory"
+  file:
+   path: "{{gradle_home}}"
+   state: absent
+

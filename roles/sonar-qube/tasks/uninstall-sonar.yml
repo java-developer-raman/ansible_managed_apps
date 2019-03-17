@@ -1,0 +1,20 @@
+---
+
+- name: "Löschen Sie PATH von ~/.bashrc"
+  lineinfile:
+   path: ~/.bashrc
+   regexp: '^PATH=\$SONAR_HOME'
+   state: absent
+
+- name: "Löschen Sie SONAR_HOME von ~/.bashrc"
+  lineinfile:
+   path: ~/.bashrc
+   regexp: '^SONAR_HOME'
+   state: absent
+   backup: yes
+
+- name: "Löschen Sie Sonar Directory"
+  file:
+   path: "{{sonar_home}}"
+   state: absent
+

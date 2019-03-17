@@ -1,0 +1,26 @@
+---
+
+- name: "Gradle Archiv extrahieren"
+  unarchive:
+   src: "{{herunterladen_gradle_url}}"
+   dest: "{{programs_location}}"
+   remote_src: yes
+   group: "{{group_name}}"
+   owner: "{{user_name}}"
+   mode: 0744
+   creates: "{{gradle_home}}"
+
+- name: "Einfügen Sie GRADLE_HOME in ~/.bashrc"
+  lineinfile:
+   path: ~/.bashrc
+   regexp: '^GRADLE_HOME'
+   line: "GRADLE_HOME={{gradle_home}}"
+   backup: yes
+   insertafter: EOF
+
+- name: "Einfügen Sie PATH in ~/.bashrc"
+  lineinfile:
+   path: ~/.bashrc
+   regexp: '^PATH=\$GRADLE_HOME/bin:\$PATH'
+   line: "PATH=$GRADLE_HOME/bin:$PATH"
+   insertafter: EOF

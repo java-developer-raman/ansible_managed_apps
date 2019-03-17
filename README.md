@@ -64,6 +64,8 @@ I created this role just to check the versions of installed softwares. Or check 
 
 1. Since for each task ansible creates a new ssh task. So I have noticed that if you have shell script was not working as desired especially grep commands in shell script. So that is why I created a service file which invoke tomcat-init script.
 
+2. To get facts of a remote machine, put the machine name or ip in hosts file. and Run command __ansible all -m setup__. It will display full json. Or to check variable names you can also check facts.txt available in repo.
 
+3. Documentation of jinja2 is available here : http://jinja.pocoo.org/docs/2.10/templates/#replace 
   
 
