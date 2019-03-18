@@ -14,7 +14,11 @@ I have made my ansible project based upon standard directory structure as sugges
 1. Uninstall all softwares in one go.
    
    **ansible-playbook -i inventories/staging site.yml --extra-vars "operation=un-install" --ask-become-pass**
-1. Install a particular software (e.g. GIT)
+1. Install more than one softwares (e.g. GIT and Gradle)
+   
+   **ansible-playbook -i inventories/staging site.yml --tags "git,gradle" --extra-vars "operation=install" --ask-become-pass --ask-vault-pass**
+
+1. Install only one particular software (e.g. GIT)
    
    **ansible-playbook -i inventories/staging site.yml --tags "git" --extra-vars "operation=install" --ask-become-pass --ask-vault-pass**
 
@@ -60,12 +64,12 @@ This role can be used to install or un install tomcat from remote machine.
 
 I created this role just to check the versions of installed softwares. Or check if it is installed or not to get a clear view which software is missing on remote machine.
 
-* __Trobleshooting__
+* __Trobleshooting / Notes__
 
 1. Since for each task ansible creates a new ssh task. So I have noticed that if you have shell script was not working as desired especially grep commands in shell script. So that is why I created a service file which invoke tomcat-init script.
 
-2. To get facts of a remote machine, put the machine name or ip in hosts file. and Run command __ansible all -m setup__. It will display full json. Or to check variable names you can also check facts.txt available in repo.
+1. To get facts of a remote machine, put the machine name or ip in hosts file. and Run command __ansible all -m setup__. It will display full json. Or to check variable names you can also check facts.txt available in repo.
 
-3. Documentation of jinja2 is available here : http://jinja.pocoo.org/docs/2.10/templates/#replace 
+1. Documentation of jinja2 is available here : http://jinja.pocoo.org/docs/2.10/templates/#replace 
   
 
