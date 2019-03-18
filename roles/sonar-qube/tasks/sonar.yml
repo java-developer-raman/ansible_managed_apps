@@ -19,6 +19,15 @@
    backup: yes
    insertafter: EOF
 
+# We are making it fast fail, so that we can correct the problem before setting it in PATH.
+- name: "Überprufen Sie executable Path, Fehler wenn nicht besteht"
+  stat:
+   path: "$SONAR_HOME/{{sonar_executable_path}}"
+  register: p
+- debug:
+   msg: "Executable weg nicht gefunden. Vielleict property Beurteilung war nicht korrekt"
+  when: p.stat.isdir is not defined or !p.stat.isdir
+  
 - name: "Einfügen Sie PATH in ~/.bashrc"
   lineinfile:
    path: ~/.bashrc
