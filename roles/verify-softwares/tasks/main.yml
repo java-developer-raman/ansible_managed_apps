@@ -8,8 +8,9 @@
   tags: java
   when: operation == 'verify' and ansible_facts['os_family'] == 'Debian'
 
-- import_tasks: verify-docker-rasbian.yml
-  when: operation == 'verify' and ansible_lsb.id == 'Raspbian'
+- import_tasks: verify-docker.yml
+  tags: docker
+  when: operation == 'verify'
 
 - import_tasks: verify-vim.yml
   tags: vim
@@ -21,6 +22,14 @@
 
 - import_tasks: verify-git.yml
   tags: git
+  when: operation == 'verify' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: verify-sonar.yml
+  tags: sonar
+  when: operation == 'verify' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: verify-gradle.yml
+  tags: gradle
   when: operation == 'verify' and ansible_facts['os_family'] == 'Debian'
 
 # When task to get the version of software will fail, corresponding variable will be undefined, here we are checking if variable is undefined
@@ -35,5 +44,7 @@
     - "java: {{ java_version_command | ternary(java_version_command.stdout, 'Java Not Found') }}"
     - "docker: {{ docker_version_command | ternary(docker_version_command.stdout, 'Docker Not Found') }}"
     - "tomcat: {{tomcat_version_command | ternary(tomcat_version_command.stdout, 'Tomcat Not Found')}}"
+    - "sonar: {{sonar_version_command | ternary(sonar_version_command.stdout, 'Sonar Not Found')}}"
+    - "gradle: {{gradle_version_command | ternary(gradle_version_command.stdout, 'Gradle Not Found')}}"
   when: operation == 'verify'
 

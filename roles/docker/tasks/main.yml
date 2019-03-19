@@ -4,6 +4,10 @@
   tags: docker
   when: operation == 'install' and ansible_lsb.id == 'Raspbian'
 
-- import_tasks: uninstall-docker-rasbian.yml
+- import_tasks: docker-ubuntu.yml
   tags: docker
-  when: operation == 'un-install' and ansible_lsb.id == 'Raspbian'
+  when: operation == 'install' and ansible_lsb.id == 'Ubuntu'
+
+- import_tasks: uninstall-docker.yml
+  tags: docker
+  when: operation == 'un-install'

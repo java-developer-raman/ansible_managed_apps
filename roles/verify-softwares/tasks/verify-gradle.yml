@@ -1,0 +1,7 @@
+---
+# Here we are ignoring any error came while invoking the command, and assume that software / Tool is not installed
+- name: Verify Gradle
+  shell: gradle -v | grep Gradle | cut -f2 -d ' '
+  register: gradle_version_command
+  ignore_errors: True
+

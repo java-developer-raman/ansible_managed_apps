@@ -1,2 +1,4 @@
 herunterladen_file: /tmp/get-docker.sh
+docker_gpg_key_url: https://download.docker.com/linux/ubuntu/gpg
+docker_repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_lsb.codename}} stable"
 
