@@ -8,6 +8,10 @@
   tags: docker
   when: operation == 'install' and ansible_lsb.id == 'Ubuntu'
 
+- import_tasks: docker-compose.yml
+  tags: docker
+  when: operation == 'install'
+
 - import_tasks: uninstall-docker.yml
   tags: docker
   when: operation == 'un-install'

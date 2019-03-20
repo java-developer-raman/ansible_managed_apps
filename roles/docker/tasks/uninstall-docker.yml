@@ -1,5 +1,16 @@
 ---
 # Use shell command if apt package does not work shell: apt-get -y purge docker-ce
+- name: Loeschen Sie docker-compose Symbolic link
+  file:
+   path: /usr/bin/docker-compose
+   state: absent
+  become: yes
+
+- name: Loeschen Sie docker-compose
+  file:
+   path: "{{programs_location}}/docker-compose"
+   state: absent
+
 - name: Uninstall Docker CE package
   apt:
    name: docker-ce

@@ -1,0 +1,16 @@
+---
+
+- name: "Herunterladen docker-compose von Internet, wenn nicht besteht"
+  get_url:
+   url: "{{docker_compose_url}}"
+   dest: "{{programs_location}}/docker-compose"
+   mode: 0744
+
+- name: Erstellen Sie Symbolic link
+  file:
+   src: "{{programs_location}}/docker-compose"
+   dest: /usr/bin/docker-compose
+   state: link
+   owner: "{{user_name}}"
+   group: "{{group_name}}"  
+  become: yes

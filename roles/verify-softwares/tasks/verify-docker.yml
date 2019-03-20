@@ -6,3 +6,10 @@
   become: yes
   become_method: sudo
   ignore_errors: True
+
+- name: Verify Docker compose
+  shell: docker-compose --version | cut -d ' ' -f3,4,5
+  register: docker_compose_version_command
+  become: yes
+  become_method: sudo
+  ignore_errors: True
