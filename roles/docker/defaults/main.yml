@@ -2,4 +2,5 @@ herunterladen_file: /tmp/get-docker.sh
 docker_gpg_key_url: https://download.docker.com/linux/ubuntu/gpg
 docker_repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_lsb.codename}} stable"
 docker_compose_url: "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-{{ansible_system}}-{{ansible_architecture}}"
+docker_machine_url: "https://github.com/docker/machine/releases/download/v0.16.0/docker-machine-{{ansible_system}}-{{ansible_architecture}}"
 

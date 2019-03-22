@@ -44,6 +44,7 @@
     - "java: {{ java_version_command | ternary(java_version_command.stdout, 'Java Not Found') }}"
     - "docker: {{ docker_version_command | ternary(docker_version_command.stdout, 'Docker Not Found') }}"
     - "docker-compose: {{ docker_compose_version_command | ternary(docker_compose_version_command.stdout, 'Docker compose Not Found') }}"
+    - "docker-machine: {{ docker_machine_version_command | ternary(docker_machine_version_command.stdout, 'Docker machine Not Found') }}"
     - "tomcat: {{tomcat_version_command | ternary(tomcat_version_command.stdout, 'Tomcat Not Found')}}"
     - "sonar: {{sonar_version_command | ternary(sonar_version_command.stdout, 'Sonar Not Found')}}"
     - "gradle: {{gradle_version_command | ternary(gradle_version_command.stdout, 'Gradle Not Found')}}"

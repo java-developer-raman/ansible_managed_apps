@@ -1,5 +1,16 @@
 ---
 # Use shell command if apt package does not work shell: apt-get -y purge docker-ce
+- name: Loeschen Sie docker-machine Symbolic link
+  file:
+    path: /usr/bin/docker-machine
+    state: absent
+  become: yes
+
+- name: Loeschen Sie docker-machine
+  file:
+    path: "{{programs_location}}/docker-machine"
+    state: absent
+
 - name: Loeschen Sie docker-compose Symbolic link
   file:
    path: /usr/bin/docker-compose

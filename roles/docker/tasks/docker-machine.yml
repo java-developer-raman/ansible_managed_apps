@@ -1,0 +1,16 @@
+---
+
+- name: Herunterladen docker-machine von Internet, wenn nicht besteht
+  get_url:
+   url: "{{docker_machine_url}}"
+   dest: "{{programs_location}}/docker-machine"
+   mode: 0744
+
+- name: Erstellen Sie Symbolic link
+  file:
+   src: "{{programs_location}}/docker-machine"
+   dest: /usr/bin/docker-machine
+   state: link
+   owner: "{{user_name}}"
+   group: "{{group_name}}"  
+  become: yes
