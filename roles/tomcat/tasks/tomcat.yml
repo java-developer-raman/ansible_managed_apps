@@ -8,6 +8,14 @@
    mode: 0744
    checksum: "sha512:{{tomcat_herunterladen_url_sha}}"
 
+- name: "Erstellt Server Directory, wenn nicht da"
+  file:
+    path: "{{servers_directory}}"
+    mode: 0744
+    owner: "{{user_name}}"
+    group: "{{group_name}}"
+    state: directory
+
 # Step 2: Extracting tomcat
 - name: "Tomcat Archiv extrahieren"
   unarchive:
