@@ -1,0 +1,92 @@
+---
+# Followed below web page to setup role steps
+# https://www.elastic.co/guide/en/elastic-stack-get-started/6.7/get-started-elastic-stack.html
+# http://localhost:5601/app/kibana#/dashboard/Metricbeat-system-overview
+- name: "Elastic Search extrahieren"
+  unarchive:
+    src: "{{herunterladen_elasticsearch_url}}"
+    dest: "{{servers_directory}}"
+    remote_src: yes
+    group: "{{group_name}}"
+    owner: "{{user_name}}"
+    mode: 0744
+    creates: "{{elasticsearch_home}}"
+    validate_certs: yes
+
+- name: "Einfügen Sie ELASTICSEARCH_HOME in ~/.bashrc"
+  lineinfile:
+    path: ~/.bashrc
+    regexp: '^ELASTICSEARCH_HOME'
+    line: "ELASTICSEARCH_HOME={{elasticsearch_home}}"
+    backup: yes
+    insertafter: EOF
+
+- name: Create Elasticsearch startup script
+  template: src=elasticsearch.tpl dest="{{elasticsearch_home}}/bin/elasticsearch-init" mode=0755
+
+- name: "Einfügen Sie PATH in ~/.bashrc"
+  lineinfile:
+    path: ~/.bashrc
+    regexp: '^PATH=\$ELASTICSEARCH_HOME'
+    line: "PATH=$ELASTICSEARCH_HOME/bin:$PATH"
+    insertafter: EOF
+
+- name: "Start Elasticsearch"
+  shell: "{{elasticsearch_home}}/bin/elasticsearch-init start"
+  become: yes
+
+- name: "wait for elastic search to start"
+  wait_for: port={{elasticsearch_port}}
+
+- name: "Kibana Archiv extrahieren"
+  unarchive:
+    src: "{{herunterladen_kibana_url}}"
+    dest: "{{servers_directory}}"
+    remote_src: yes
+    group: "{{group_name}}"
+    owner: "{{user_name}}"
+    mode: 0744
+    creates: "{{kibana_home}}"
+    validate_certs: yes
+
+- name: "Einfügen Sie KIBANA_HOME in ~/.bashrc"
+  lineinfile:
+    path: ~/.bashrc
+    regexp: '^KIBANA_HOME'
+    line: "KIBANA_HOME={{kibana_home}}"
+    backup: yes
+    insertafter: EOF
+
+- name: Create Kibana startup script
+  template: src=kibana.tpl dest="{{kibana_home}}/bin/kibana-init" mode=0755
+
+- name: "Einfügen Sie PATH in ~/.bashrc"
+  lineinfile:
+    path: ~/.bashrc
+    regexp: '^PATH=\$KIBANA_HOME'
+    line: "PATH=$KIBANA_HOME/bin:$PATH"
+    insertafter: EOF
+
+- name: "Start kibana"
+  shell: "{{kibana_home}}/bin/kibana-init start"
+  become: yes
+
+- name: "wait for Kibana to start"
+  wait_for: port={{kibana_port}}
+
+- name: "Install Metricbeat"
+  apt:
+    deb: "{{herunterladen_metricbeat_url}}"
+  become: yes
+
+- name: "From the Metricbeat install directory, enable the system module"
+  shell: metricbeat modules enable system
+  become: yes
+
+- name: "Set up the initial environment"
+  shell: metricbeat setup -e
+  become: yes
+
+- name: Start Metricbeat
+  service: name=metricbeat state=started daemon_reload=yes
+  become: yes

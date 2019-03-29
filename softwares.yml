@@ -10,6 +10,7 @@
    - role: sonar-qube
    - role: gradle
    - role: verify-softwares
+   - role: elk
 
 
 

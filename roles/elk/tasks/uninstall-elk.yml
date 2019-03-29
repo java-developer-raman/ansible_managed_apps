@@ -1,0 +1,57 @@
+---
+
+#- name: Stop Metricbeat
+#  service: name=metricbeat state=stopped
+#  become: yes
+
+- name: "Remove Metricbeat"
+  apt:
+    name: metricbeat
+    purge: yes
+    state: absent
+  become: yes
+
+# Despite the script available in path, it is not executing. Will see later
+- name: "Stop kibana"
+  shell: '{{kibana_home}}/bin/kibana-init stop'
+  become: yes
+
+- name: "Stop Elasticsearch"
+  shell: '{{elasticsearch_home}}/bin/elasticsearch-init stop'
+  become: yes
+
+- name: "Removing kibana_home from ~/.bashrc"
+  lineinfile:
+    path: ~/.bashrc
+    regexp: '^KIBANA_HOME'
+    state: absent
+    backup: yes
+
+- name: "Removing kibana PATH von ~/.bashrc"
+  lineinfile:
+    path: ~/.bashrc
+    regexp: '^PATH=\$KIBANA_HOME/bin:\$PATH'
+    state: absent
+
+- name: "Removing elasticsearch_home from ~/.bashrc"
+  lineinfile:
+    path: ~/.bashrc
+    regexp: '^ELASTICSEARCH_HOME'
+    state: absent
+    backup: yes
+
+- name: "Removing Elasticsearch PATH von ~/.bashrc"
+  lineinfile:
+    path: ~/.bashrc
+    regexp: '^PATH=\$ELASTICSEARCH_HOME/bin:\$PATH'
+    state: absent
+
+- name: "Removing kibana_home from system"
+  file:
+    path: "{{kibana_home}}"
+    state: absent
+
+- name: "Removing elasticsearch_home from system"
+  file:
+    path: "{{elasticsearch_home}}"
+    state: absent

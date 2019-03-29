@@ -1,0 +1,9 @@
+---
+
+- import_tasks: elk.yml
+  tags: elk
+  when: operation == 'install' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: uninstall-elk.yml
+  tags: elk
+  when: operation == 'un-install' and ansible_facts['os_family'] == 'Debian'

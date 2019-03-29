@@ -1,0 +1,7 @@
+herunterladen_elasticsearch_url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.7.0.tar.gz
+elasticsearch_home: "{{servers_directory}}/elasticsearch-6.7.0"
+elasticsearch_port: 9200
+herunterladen_kibana_url: https://artifacts.elastic.co/downloads/kibana/kibana-6.7.0-linux-x86_64.tar.gz
+kibana_home: "{{servers_directory}}/kibana-6.7.0-linux-x86_64"
+kibana_port: 5601
+herunterladen_metricbeat_url: https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-6.7.0-amd64.deb
