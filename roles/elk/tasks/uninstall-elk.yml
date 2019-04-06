@@ -12,39 +12,45 @@
   become: yes
 
 # Despite the script available in path, it is not executing. Will see later
+- name: "Stop Logsash"
+  shell: 'usr/bin/logstash stop'
+  become: yes
+
+- name: "Removing link of logstash from /usr/bin"
+  file:
+    path: /usr/bin/logstash
+    state: absent
+  become: yes
+
+- name: "Stop Filebeat"
+  shell: '/usr/bin/filebeat stop'
+  become: yes
+
+- name: "Removing link of filebeat from /usr/bin"
+  file:
+    path: /usr/bin/filebeat
+    state: absent
+  become: yes
+
 - name: "Stop kibana"
-  shell: '{{kibana_home}}/bin/kibana-init stop'
+  shell: '/usr/bin/kibana stop'
+  become: yes
+
+- name: "Removing link of kibana from /usr/bin"
+  file:
+    path: /usr/bin/kibana
+    state: absent
   become: yes
 
 - name: "Stop Elasticsearch"
-  shell: '{{elasticsearch_home}}/bin/elasticsearch-init stop'
+  shell: '/usr/bin/elasticsearch stop'
   become: yes
 
-- name: "Removing kibana_home from ~/.bashrc"
-  lineinfile:
-    path: ~/.bashrc
-    regexp: '^KIBANA_HOME'
+- name: "Removing link of Elasticsearch from /usr/bin"
+  file:
+    path: /usr/bin/elasticsearch
     state: absent
-    backup: yes
-
-- name: "Removing kibana PATH von ~/.bashrc"
-  lineinfile:
-    path: ~/.bashrc
-    regexp: '^PATH=\$KIBANA_HOME/bin:\$PATH'
-    state: absent
-
-- name: "Removing elasticsearch_home from ~/.bashrc"
-  lineinfile:
-    path: ~/.bashrc
-    regexp: '^ELASTICSEARCH_HOME'
-    state: absent
-    backup: yes
-
-- name: "Removing Elasticsearch PATH von ~/.bashrc"
-  lineinfile:
-    path: ~/.bashrc
-    regexp: '^PATH=\$ELASTICSEARCH_HOME/bin:\$PATH'
-    state: absent
+  become: yes
 
 - name: "Removing kibana_home from system"
   file:
@@ -54,4 +60,14 @@
 - name: "Removing elasticsearch_home from system"
   file:
     path: "{{elasticsearch_home}}"
+    state: absent
+
+- name: "Removing logstash_home from system"
+  file:
+    path: "{{logstash_home}}"
+    state: absent
+
+- name: "Removing filebeat_home from system"
+  file:
+    path: "{{filebeat_home}}"
     state: absent

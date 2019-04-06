@@ -13,31 +13,24 @@
     creates: "{{elasticsearch_home}}"
     validate_certs: yes
 
-- name: "Einfügen Sie ELASTICSEARCH_HOME in ~/.bashrc"
-  lineinfile:
-    path: ~/.bashrc
-    regexp: '^ELASTICSEARCH_HOME'
-    line: "ELASTICSEARCH_HOME={{elasticsearch_home}}"
-    backup: yes
-    insertafter: EOF
-
 - name: Create Elasticsearch startup script
   template: src=elasticsearch.tpl dest="{{elasticsearch_home}}/bin/elasticsearch-init" mode=0755
 
-- name: "Einfügen Sie PATH in ~/.bashrc"
-  lineinfile:
-    path: ~/.bashrc
-    regexp: '^PATH=\$ELASTICSEARCH_HOME'
-    line: "PATH=$ELASTICSEARCH_HOME/bin:$PATH"
-    insertafter: EOF
+- name: Create link to access Elasticsearch
+  file:
+    src: "{{elasticsearch_home}}/bin/elasticsearch-init"
+    dest: /usr/bin/elasticsearch
+    state: link
+  become: yes
 
 - name: "Start Elasticsearch"
-  shell: "{{elasticsearch_home}}/bin/elasticsearch-init start"
+  shell: "/usr/bin/elasticsearch start"
   become: yes
 
 - name: "wait for elastic search to start"
   wait_for: port={{elasticsearch_port}}
 
+# Install Kibana
 - name: "Kibana Archiv extrahieren"
   unarchive:
     src: "{{herunterladen_kibana_url}}"
@@ -49,31 +42,68 @@
     creates: "{{kibana_home}}"
     validate_certs: yes
 
-- name: "Einfügen Sie KIBANA_HOME in ~/.bashrc"
-  lineinfile:
-    path: ~/.bashrc
-    regexp: '^KIBANA_HOME'
-    line: "KIBANA_HOME={{kibana_home}}"
-    backup: yes
-    insertafter: EOF
-
 - name: Create Kibana startup script
   template: src=kibana.tpl dest="{{kibana_home}}/bin/kibana-init" mode=0755
 
-- name: "Einfügen Sie PATH in ~/.bashrc"
-  lineinfile:
-    path: ~/.bashrc
-    regexp: '^PATH=\$KIBANA_HOME'
-    line: "PATH=$KIBANA_HOME/bin:$PATH"
-    insertafter: EOF
+- name: Create link to access Kibana
+  file:
+    src: "{{kibana_home}}/bin/kibana-init"
+    dest: /usr/bin/kibana
+    state: link
+  become: yes
 
 - name: "Start kibana"
-  shell: "{{kibana_home}}/bin/kibana-init start"
+  shell: "/usr/bin/kibana start"
   become: yes
 
 - name: "wait for Kibana to start"
   wait_for: port={{kibana_port}}
 
+# Install logstash
+- name: "Logstash Archiv extrahieren"
+  unarchive:
+    src: "{{herunterladen_logstash_url}}"
+    dest: "{{servers_directory}}"
+    remote_src: yes
+    group: "{{group_name}}"
+    owner: "{{user_name}}"
+    mode: 0744
+    creates: "{{logstash_home}}"
+    validate_certs: yes
+
+- name: Create logstash startup script
+  template: src=logstash.tpl dest="{{logstash_home}}/bin/logstash-init" mode=0755
+
+- name: Create link to access Logstash
+  file:
+    src: "{{logstash_home}}/bin/logstash-init"
+    dest: /usr/bin/logstash
+    state: link
+  become: yes
+
+# Install Filebeat
+- name: "Filebeat Archiv extrahieren"
+  unarchive:
+    src: "{{herunterladen_filebeat_url}}"
+    dest: "{{servers_directory}}"
+    remote_src: yes
+    group: "{{group_name}}"
+    owner: "{{user_name}}"
+    mode: 0744
+    creates: "{{filebeat_home}}"
+    validate_certs: yes
+
+- name: Create Filebeat startup script
+  template: src=filebeat.tpl dest="{{filebeat_home}}/filebeat-init" mode=0755
+
+- name: Create link to access Filebeat
+  file:
+   src: "{{filebeat_home}}/filebeat-init"
+   dest: /usr/bin/filebeat
+   state: link
+  become: yes
+
+# Install Metricbeat
 - name: "Install Metricbeat"
   apt:
     deb: "{{herunterladen_metricbeat_url}}"
