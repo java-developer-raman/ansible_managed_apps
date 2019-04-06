@@ -77,6 +77,8 @@ case "$1" in
 
 	# Remove registry and Start Daemon
 	rm $FILEBEAT_HOME/data/registry
+	# Un comment the below command, if you want to produce logs
+	# start-stop-daemon --start --user raman -c raman --pidfile "$PID_FILE" --make-pidfile --background --startas /bin/bash -- -c "exec $DAEMON $DAEMON_OPTS > $FILEBEAT_HOME/logs/filebeat.log 2>&1"
 	start-stop-daemon --start --user {{user_name}} -c {{user_name}} --pidfile "$PID_FILE" --make-pidfile --background --exec $DAEMON -- $DAEMON_OPTS
 	return=$?
 	if [ $return -eq 0 ]; then
