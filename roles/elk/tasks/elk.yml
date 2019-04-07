@@ -81,6 +81,9 @@
     state: link
   become: yes
 
+- name: Copy First pipelie
+  copy: src=first-pipeline.conf dest="{{logstash_home}}/config/first-pipeline.conf" mode=0755
+
 # Install Filebeat
 - name: "Filebeat Archiv extrahieren"
   unarchive:
@@ -102,6 +105,9 @@
    dest: /usr/bin/filebeat
    state: link
   become: yes
+
+- name: Copy filebeat.yml
+  copy: src=filebeat.yml dest="{{filebeat_home}}/filebeat.yml" mode=0755
 
 # Install Metricbeat
 - name: "Install Metricbeat"

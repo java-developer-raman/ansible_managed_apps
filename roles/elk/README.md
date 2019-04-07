@@ -17,7 +17,17 @@ It will create four folders inside programs/servers directory for each of the ap
 5. Metricbeat: To send information about machine e.g. CPU usage, memory usage.
 
 I have followed the following URL: https://www.elastic.co/guide/en/logstash/current/advanced-pipeline.html
-All the four applications can be start through command line as all of them have symbolic links inside /usr/bin
+All the four applications can be start through command line as all of them have symbolic links inside /usr/bin. I have created a deafult filebeat.yml and first-pipeline.conf
+for basic things, In future these pipeline can be enhanced with more filters.
+How to setup logstash index in Kibana
+-------------------------------------
+1. Open Kibana
+2. Go to Management on left side of menu
+3. Then select Index Patterns
+4. Then click on button "create Index Pattern"
+5. Give index name as logstash-*
+
+It will create a logstash index, then logs pushed by filebeat will be visible on dashboard. Metricbeat index gets automatically created.
 
 1. Starting/Stopping/Status ElasticSearch
    --------------------------------------
