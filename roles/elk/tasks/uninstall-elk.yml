@@ -13,7 +13,7 @@
 
 # Despite the script available in path, it is not executing. Will see later
 - name: "Stop Logsash"
-  shell: 'usr/bin/logstash stop'
+  shell: '/usr/bin/logstash stop'
   become: yes
 
 - name: "Removing link of logstash from /usr/bin"
