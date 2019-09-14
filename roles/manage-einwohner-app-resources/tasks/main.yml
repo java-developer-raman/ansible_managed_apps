@@ -1,0 +1,9 @@
+---
+
+- import_tasks: install-einwohner-app-resources.yml
+  tags: einwohner
+  when: operation == 'install' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: uninstall-einwohner-app-resources.yml
+  tags: einwohner
+  when: operation == 'un-install' and ansible_facts['os_family'] == 'Debian'

@@ -11,6 +11,8 @@
    - role: gradle
    - role: verify-softwares
    - role: elk
+   - role: manage-einwohner-app-resources
+   - role: manage-config-server-app-resources
 
 
 

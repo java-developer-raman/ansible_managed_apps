@@ -1,0 +1,4 @@
+---
+
+# Application configuration Verzeichnis, wo alle Applikation properties steht
+app_conf_home: "{{servers_directory}}/app-conf/config-server"

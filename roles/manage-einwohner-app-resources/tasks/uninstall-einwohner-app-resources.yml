@@ -1,0 +1,7 @@
+---
+
+- name: "Loeschen wir einwohner app-conf directory von system"
+  file:
+   path: "{{app_conf_home}}"
+   state: absent
+

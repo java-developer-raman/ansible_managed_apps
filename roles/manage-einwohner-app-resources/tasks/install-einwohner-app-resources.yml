@@ -1,0 +1,31 @@
+---
+
+# Step 1: Erstellen wir app directory, wenn nicht da
+- name: "Erstellt Server Directory, wenn nicht da"
+  file:
+    path: "{{app_conf_home}}"
+    mode: 0774
+    owner: "{{user_name}}"
+    group: "{{group_name}}"
+    state: directory
+
+
+# Step 2: Copy Certifikat und keystore
+- name: Copy einwohner-tls.jks
+  copy: src=einwohner-tls.jks dest="{{app_conf_home}}/" mode=0444
+
+- name: Copy einwohner-trust-store.jks
+  copy: src=einwohner-trust-store.jks dest="{{app_conf_home}}/" mode=0444
+
+- name: Copy logback.xml
+  copy: src=logback.xml dest="{{app_conf_home}}/" mode=0444
+
+- name: Copy vault-cert.pkcs12
+  copy: src=vault-cert.pkcs12 dest="{{app_conf_home}}/" mode=0444
+
+# Step 3: Executing templates und copy neue file
+- name: Create einwohner-application-basic.properties.tpl
+  template: src=einwohner-application-basic.properties.tpl dest="{{app_conf_home}}/einwohner-application-basic.properties" mode=0644
+
+- name: Create server-einwohner.xml.tpl
+  template: src=server-einwohner.xml.tpl dest="{{app_conf_home}}/server-einwohner.xml" mode=0644

@@ -1,0 +1,9 @@
+---
+
+- import_tasks: install-config-server-app-resources.yml
+  tags: config-server
+  when: operation == 'install' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: uninstall-config-server-app-resources.yml
+  tags: config-server
+  when: operation == 'un-install' and ansible_facts['os_family'] == 'Debian'
