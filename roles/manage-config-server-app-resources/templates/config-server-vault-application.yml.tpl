@@ -4,20 +4,20 @@ server:
     enabled: true
     # If client auth is set to need, then and client which will connect to config server will also provide it's certificate already shared by config server with him
     #client-auth: need
-    key-store: file:${HOME}/app-config/config-server-tls.jks
+    key-store: file:{{ app_conf_home }}/config-server-tls.jks
     key-store-password: {{ config_server_key_store_password }}
     key-alias: config-server
     key-store-type: pkcs12
     # trust store will be used by config server to trust the client which can access it.
     # In my trust store I have added a trusted certificate of some another application
-    trust-store: /home/raman/app-config/config-server-trust-store.jks
+    trust-store: {{ app_conf_home }}/config-server-trust-store.jks
     trust-store-password: {{ config_server_trust_store_password }}
     trust-store-type: pkcs12
 # these settings are required to encrypt or decrypt data written in backend
 encrypt:
   keyStore:
     #Path to key store files, Please copy all the files in resources/keystore directoryto some location and give full path here
-    location: file:${HOME}/app-config/config-server-crypto.jks
+    location: file:{{ app_conf_home }}/config-server-crypto.jks
     password: {{ config_server_crypto_password }}
     alias: config-server-crypto
     secret: {{ config_server_crypto_secret }}
@@ -47,7 +47,7 @@ spring:
       ssl:
         # This keystore contains both private key and certificate required to login into VAULT via CERT
         #Path to vault-cert.pkcs12, Please copy all the files in resources/keystore directoryto some location and give full path here
-        key-store: file:${HOME}/app-config/vault-cert.pkcs12
+        key-store: file:{{ app_conf_home }}/vault-cert.pkcs12
         key-store-password: {{ vault_cert_keystore_password }}
         cert-auth-path: cert
       kv-version: 1
@@ -62,7 +62,7 @@ spring:
           backend: secret
           ssl:
             # This keystore contains both private key and certificate required to login into VAULT via CERT
-            key-store: file:${HOME}/app-config/vault-cert.pkcs12
+            key-store: file:{{ app_conf_home }}/vault-cert.pkcs12
             key-store-password: {{ vault_cert_keystore_password }}
             cert-auth-path: cert
           kv-version: 1
