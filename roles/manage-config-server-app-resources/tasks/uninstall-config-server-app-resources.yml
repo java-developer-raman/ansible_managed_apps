@@ -2,6 +2,6 @@
 
 - name: "Loeschen wir config server app-conf directory von system"
   file:
-   path: "{{app_conf_home}}"
+   path: "{{config_server_dir}}"
    state: absent
 
