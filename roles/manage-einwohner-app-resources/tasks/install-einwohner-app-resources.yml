@@ -1,7 +1,7 @@
 ---
 
 # Step 1: Erstellen wir app directory, wenn nicht da
-- name: "Erstellt Server Directory, wenn nicht da"
+- name: "Erstellt Configuration Directory, wenn nicht da"
   file:
     path: "{{app_conf_home}}"
     mode: 0700
@@ -9,6 +9,13 @@
     group: "{{group_name}}"
     state: directory
 
+- name: "Erstellt logs Directory, wenn nicht da"
+  file:
+    path: "{{app_logs_home}}"
+    mode: 0700
+    owner: "{{user_name}}"
+    group: "{{group_name}}"
+    state: directory
 
 # Step 2: Copy Certifikat und keystore
 - name: Copy einwohner-tls.jks

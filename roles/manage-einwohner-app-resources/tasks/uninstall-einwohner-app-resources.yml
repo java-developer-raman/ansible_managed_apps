@@ -5,3 +5,7 @@
    path: "{{app_conf_home}}"
    state: absent
 
+- name: "Loeschen wir einwohner app-logs directory von system"
+  file:
+    path: "{{app_logs_home}}"
+    state: absent

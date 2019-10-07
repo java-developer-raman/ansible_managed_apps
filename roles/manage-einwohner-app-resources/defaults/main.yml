@@ -2,3 +2,5 @@
 
 # Application configuration Verzeichnis, wo alle Applikation properties steht
 app_conf_home: "{{servers_directory}}/app-conf/einwohner"
+app_logs_home: "{{servers_directory}}/app-logs/einwohner"
+docker_container_logs_home: "/usr/local/tomcat/app-logs"
