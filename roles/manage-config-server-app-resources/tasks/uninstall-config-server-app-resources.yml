@@ -2,6 +2,10 @@
 
 - name: "Loeschen wir config server app-conf directory von system"
   file:
-   path: "{{config_server_dir}}"
+   path: "{{host_config_server_dir}}"
    state: absent
 
+- name: "Loeschen wir config server app-logs directory von system"
+  file:
+    path: "{{host_config_server_logs_dir}}"
+    state: absent

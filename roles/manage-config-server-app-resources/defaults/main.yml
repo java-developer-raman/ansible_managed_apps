@@ -1,5 +1,7 @@
 ---
 
 # Application configuration Verzeichnis, wo alle Applikation properties steht
-app_conf_home: "/home/config-server/app-conf"
-config_server_dir: "{{servers_directory}}/app-conf/config-server"
+docker_container_conf_home: "/home/config-server/app-conf"
+docker_container_logs_home: "/home/config-server/app-logs"
+host_config_server_dir: "{{servers_directory}}/app-conf/config-server"
+host_config_server_logs_dir: "{{servers_directory}}/app-logs/config-server"

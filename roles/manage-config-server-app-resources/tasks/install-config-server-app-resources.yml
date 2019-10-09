@@ -1,31 +1,38 @@
 ---
 
 # Step 1: Erstellen wir app directory, wenn nicht da
-- name: "Erstellt Server Directory, wenn nicht da"
+- name: "Erstellt Configuration Directory, wenn nicht da"
   file:
-    path: "{{config_server_dir}}"
+    path: "{{host_config_server_dir}}"
     mode: 0700
     owner: "{{user_name}}"
     group: "{{group_name}}"
     state: directory
 
+- name: "Erstellt Logs Directory, wenn nicht da"
+  file:
+    path: "{{host_config_server_logs_dir}}"
+    mode: 0700
+    owner: "{{user_name}}"
+    group: "{{group_name}}"
+    state: directory
 
 # Step 2: Copy Certifikat und keystore
 - name: Copy config-server-crypto.jk
-  copy: src=config-server-crypto.jks dest="{{config_server_dir}}/" mode=0400
+  copy: src=config-server-crypto.jks dest="{{host_config_server_dir}}/" mode=0400
 
 - name: Copy config-server-tls.jks
-  copy: src=config-server-tls.jks dest="{{config_server_dir}}/" mode=0400
+  copy: src=config-server-tls.jks dest="{{host_config_server_dir}}/" mode=0400
 
 - name: Copy config-server-trust-store.jks
-  copy: src=config-server-trust-store.jks dest="{{config_server_dir}}/" mode=0400
+  copy: src=config-server-trust-store.jks dest="{{host_config_server_dir}}/" mode=0400
 
 - name: Copy vault-cert.pkcs12
-  copy: src=vault-cert.pkcs12 dest="{{config_server_dir}}/" mode=0400
+  copy: src=vault-cert.pkcs12 dest="{{host_config_server_dir}}/" mode=0400
 
 - name: Copy logback.xml
-  copy: src=logback.xml dest="{{config_server_dir}}/" mode=0400
+  template: src=logback.xml.tpl dest="{{host_config_server_dir}}/logback.xml" mode=0400
 
 # Step 3: Executing templates und copy neue file
 - name: Create config-server-vault-application.yml
-  template: src=config-server-vault-application.yml.tpl dest="{{config_server_dir}}/config-server-vault-application.yml" mode=0400
+  template: src=config-server-vault-application.yml.tpl dest="{{host_config_server_dir}}/config-server-vault-application.yml" mode=0400

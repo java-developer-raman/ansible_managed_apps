@@ -10,29 +10,24 @@
     </appender>
 
     <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${log.dir}/einwohner.log</File>
+        <File>{{ docker_container_logs_home }}/config-server.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <FileNamePattern>einwohner.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>config-server.%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
         </rollingPolicy>
-       <encoder>
+        <encoder>
             <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</Pattern>
         </encoder>
     </appender>
-<!--
-    <logger name="org.springframework" level="debug" additivity="false">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="dailyRollingFileAppender" />
-    </logger>
--->
-    <logger name="com.sharma" level="debug" additivity="false">
+
+    <logger name="org.springframework" level="info" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="dailyRollingFileAppender" />
     </logger>
 
-    <root level="error">
+    <root level="info">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="dailyRollingFileAppender" />
     </root>
