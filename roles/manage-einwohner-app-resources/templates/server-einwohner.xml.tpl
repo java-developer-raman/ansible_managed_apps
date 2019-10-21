@@ -98,7 +98,7 @@
            protocol="org.apache.coyote.http11.Http11NioProtocol"
            port="8443" maxThreads="200"
            scheme="https" secure="true" SSLEnabled="true"
-           keystoreFile="app-conf/einwohner-tls.jks" keystorePass="{{ einwohner_tls_key_store_password }}"
+           keystoreFile="/usr/local/tomcat/conf/einwohner-tls.jks" keystorePass="{{ einwohner_tls_key_store_password }}"
            clientAuth="false" sslProtocol="TLS"/>
     <!-- Define a SSL/TLS HTTP/1.1 Connector on port 8443 with HTTP/2
          This connector uses the APR/native implementation which always uses
