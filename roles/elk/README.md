@@ -43,10 +43,8 @@ It will create a logstash index, then logs pushed by filebeat will be visible on
 
 3. Starting/Stopping/Status Filebeat
    --------------------------------------
-   sudo filebeat start|status|stop (Require options to start)
-   A example: sudo logstash start -f /home/raman/programs/servers/filebeat-6.7.1-linux-x86_64/config/first-pipeline.conf --config.reload.automatic
-                        OR (If config file is inside filebeat installed folder)
-              sudo logstash start -f $LOGSTASH_HOME/config/first-pipeline.conf --config.reload.automatic
+   cd $FILEBEAT_HOME
+   ./filebeat
 
 4. Starting/Stopping/Status Logstash
    --------------------------------------
