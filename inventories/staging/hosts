@@ -1,6 +1,9 @@
 [softwares]
 #raman@192.168.2.108
-127.0.0.1 ansible_connection=local
+#127.0.0.1 ansible_connection=local
+raman@192.168.2.124
+raman@192.168.2.125
 
 [administration]
-pi@192.168.2.108
+osboxes@192.168.2.124
+osboxes@192.168.2.125

@@ -10,11 +10,8 @@ herunterladen_folder: /tmp
 programs_location: "/home/{{user_name}}/programs"
 servers_directory: "{{programs_location}}/servers"
 
-# Java properties
-herunterladen_java_linux_x64_url: https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz
+# Java propertiesjdk-8u231.tar.gz
+herunterladen_java_linux_x64_url: https://download.oracle.com/otn/java/jdk/8u231-b11/5b13a193868b4bf28bcb45c792fce896/jdk-8u231-linux-x64.tar.gz
 herunterladen_java_linux_arm32_url: https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-arm32-vfp-hflt.tar.gz
-erwartet_java_version: 1.8.0_201
-java_archive_name: jdk-8u201.tar.gz
-java_install_directory: "{{programs_location}}/java"
-java_home: "{{java_install_directory}}/jdk{{erwartet_java_version}}"
+java_home: /usr/lib/jvm/java-8-openjdk-amd64
 

@@ -4,10 +4,10 @@ I have made my ansible project based upon standard directory structure as sugges
 
 1. Setting up a user
    
-   **ansible-playbook -i inventories/staging site.yml --tags "user" --extra-vars "operation=setup" --ask-pass**
-1. Dropping a user
+   **ansible-playbook -i inventories/staging site.yml --tags "user" --extra-vars "operation=setup" --ask-pass --ask-become-pass**
+1. Dropping a user 
    
-   **ansible-playbook -i inventories/staging site.yml --tags "user" --extra-vars "operation=drop" --ask-pass**
+   **ansible-playbook -i inventories/staging site.yml --tags "user" --extra-vars "operation=drop" --ask-pass --ask-become-pass**
 1. Install all softwares in one go.
    
    **ansible-playbook -i inventories/staging site.yml --extra-vars "operation=install" --ask-become-pass**

@@ -1,67 +1,24 @@
 ---
 
-- name: "Überprüfen Sie aktuell java version"
-  shell: java -version 2>&1 | grep version | awk '{print $3}' | sed 's/"//g'
-  register: aktuell_java_version
-
-# wir prufen, ob operating system rasberry oder nicht ist, dann herunterladen wir von Korrekt URL
-# File wird heruntergeladen, wenn nicht besteht
-- name: "Herunterladen Java von Internet, wenn nicht besteht"
-  get_url:
-   url: "{{herunterladen_java_linux_arm32_url if ansible_lsb.id == 'Raspbian' else herunterladen_java_linux_x64_url}}"
-   dest: "{{herunterladen_folder}}/{{java_archive_name}}"
-   headers:
-    Cookie: gpw_e24=http%3a%2F%2Fwww.oracle.com%2Ftechnetwork%2Fjava%2Fjavase%2Fdownloads%2Fjdk8-downloads-2133151.html; oraclelicense=accept-securebackup-cookie;
-  when: aktuell_java_version.stdout != erwartet_java_version 
-
-# ein Java Verzeichnis erstellen
-- name: "Erstellt Java Directory"
-  file:
-   path: "{{java_install_directory}}"
-   mode: 0744
-   owner: "{{user_name}}"
-   group: "{{group_name}}"
-   state: directory
-
-- name: "Java Archiv extrahieren"
-  unarchive:
-   src: "{{herunterladen_folder}}/{{java_archive_name}}"
-   dest: "{{java_install_directory}}"
-   remote_src: yes
-   group: "{{group_name}}"
-   owner: "{{user_name}}"
-   mode: 0744
-   creates: "{{java_home}}"
+- name: "Installing Java"
+  apt: pkg=openjdk-8-jdk state=present
+  become: yes
+  become_method: sudo
 
 # Setzen Sie PATH environment variable mit neue jdk
 - name: "Einfügen Sie JAVA_HOME in ~/.bashrc"
   lineinfile:
-   path: ~/.bashrc
-   regexp: '^JAVA_HOME'
-   line: "JAVA_HOME={{java_home}}"
-   backup: yes
-   insertafter: EOF
-  when: aktuell_java_version.stdout != erwartet_java_version
+    path: ~/.bashrc
+    regexp: '^JAVA_HOME'
+    line: "JAVA_HOME={{java_home}}"
+    backup: yes
+    insertafter: EOF
 
 - name: "Einfügen Sie PATH in ~/.bashrc"
   lineinfile:
-   path: ~/.bashrc
-   regexp: '^PATH=\$JAVA_HOME/bin:\$PATH'
-   line: "PATH=$JAVA_HOME/bin:$PATH"
-   insertafter: EOF
+    path: ~/.bashrc
+    regexp: '^PATH=\$JAVA_HOME/bin:\$PATH'
+    line: "PATH=$JAVA_HOME/bin:$PATH"
+    insertafter: EOF
   notify:
-   - load environment
-  when: aktuell_java_version.stdout != erwartet_java_version
-
-# Setzen Sie das als default java update-alternatives --install /usr/bin/java java /home/raman/programs/java/jdk1.8.0_191/bin/java 2
-
-- name: "Setzen Sie javac als default"
-  shell: update-alternatives --install /usr/bin/javac javac "{{java_home}}/bin/javac" 2000
-  become: yes
-  when: aktuell_java_version.stdout != erwartet_java_version
-
-- name: "Setzen Sie java als default"
-  shell: update-alternatives --install /usr/bin/java java "{{java_home}}/bin/java" 2000
-  become: yes
-  when: aktuell_java_version.stdout != erwartet_java_version
-
+    - load environment

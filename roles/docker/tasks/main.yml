@@ -1,12 +1,12 @@
 ---
 
-#- import_tasks: docker-rasbian.yml
-#  tags: docker
-#  when: operation == 'install' and ansible_lsb.id == 'Raspbian'
+- import_tasks: docker-rasbian.yml
+  tags: docker
+  when: operation == 'install' and ansible_lsb.id == 'Raspbian'
 
-#- import_tasks: docker-ubuntu.yml
-#  tags: docker
-#  when: operation == 'install' and ansible_lsb.id == 'Ubuntu'
+- import_tasks: docker-ubuntu.yml
+  tags: docker
+  when: operation == 'install' and ansible_lsb.id == 'Ubuntu'
 
 - import_tasks: docker-compose.yml
   tags: docker
