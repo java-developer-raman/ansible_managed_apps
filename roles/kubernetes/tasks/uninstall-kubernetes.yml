@@ -1,0 +1,2 @@
+---
+# Use shell command if apt package does not work shell: apt-get -y purge docker-ce

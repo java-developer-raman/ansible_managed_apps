@@ -1,0 +1,49 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.provider "virtualbox" do |vb|
+     # Display the VirtualBox GUI when booting the machine
+     vb.gui = true
+
+     # Customize the amount of memory on the VM:
+     vb.memory = "2048"
+     vb.cpus = 2
+   end
+
+  config.vm.define "kubernetes-master" do |master|
+    master.vm.box = "ubuntu/xenial64"
+    master.vm.network "private_network", ip: "192.168.50.11"
+    master.vm.hostname = "kubernetes-master"
+    # Setting up user which will be used for installing softwares
+    master.vm.provision "ansible" do |ansible|
+        ansible.playbook = "../site.yml"
+        ansible.limit = "administration"
+        ansible.inventory_path = "../inventories/vagrant"
+        ansible.extra_vars = {
+            operation: "setup",
+            node_ip: "192.168.50.11",
+        }
+        ansible.tags = ["user"]
+        # ansible.ask_become_pass = true
+        ansible.ask_vault_pass = true
+    end
+    # Installing necessary softwares
+    master.vm.provision "ansible" do |ansible|
+        ansible.playbook = "../site.yml"
+        ansible.limit = "softwares"
+        # Uncomment it to debug ansible
+        # ansible.verbose = "vvv"
+        ansible.inventory_path = "../inventories/vagrant"
+        ansible.extra_vars = {
+            operation: "install",
+            node_ip: "192.168.50.11",
+            ansible_user: "raman",
+        }
+        ansible.tags = ["vim","dnsutils","git","java","docker","kube-master"]
+        ansible.ask_become_pass = true
+        ansible.ask_vault_pass = true
+    end
+  end
+end

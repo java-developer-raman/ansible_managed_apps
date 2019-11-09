@@ -1,0 +1,10 @@
+---
+
+
+- import_tasks: kubernetes-master.yml
+  tags: kube-master
+  when: operation == 'install' and ansible_lsb.id == 'Ubuntu'
+
+- import_tasks: uninstall-kubernetes.yml
+  tags: kube-master
+  when: operation == 'un-install'

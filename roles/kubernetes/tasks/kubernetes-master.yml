@@ -1,0 +1,66 @@
+---
+
+- name: Remove swapfile from /etc/fstab
+  mount:
+    name: "{{ item }}"
+    fstype: swap
+    state: absent
+  with_items:
+    - swap
+    - none
+
+- name: Disable swap
+  command: swapoff -a
+  when: ansible_swaptotal_mb > 0
+
+- name: Update the apt package index
+  apt:
+    update_cache: yes
+  become: yes
+
+- name: Add an apt signing key for Kubernetes
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+  become: yes
+
+- name: Adding apt repository for Kubernetes
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: /etc/apt/sources.list.d/kubernetes.list
+  become: yes
+
+- name: Install Kubernetes binaries
+  apt:
+   name: "{{ packages }}"
+   update_cache: yes
+  vars:
+   packages:
+   - kubelet
+   - kubeadm
+   - kubectl
+  become: yes
+
+- name: Initialize the Kubernetes cluster using kubeadm
+  command: kubeadm init --apiserver-advertise-address="{{node_ip}}" --apiserver-cert-extra-sans="{{node_ip}}"  --node-name kube-master --pod-network-cidr=10.244.0.0/16
+  become: yes
+
+- name: Setup kubeconfig fuer normales User
+  command: "{{ item }}"
+  with_items:
+    - mkdir -p /home/{{user_name}}/.kube
+    - cp -i /etc/kubernetes/admin.conf /home/{{user_name}}/.kube/config
+    - chown {{user_name}}:{{group_name}} /home/{{user_name}}/.kube/config
+  become: yes
+
+- name: Install flannel pod network
+  command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml
+
+- name: Generate join command
+  command: kubeadm token create --print-join-command
+  register: join_command
+
+- name: Copy join command to local file
+  local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="/tmp/join-command"
+  notify: Check docker status

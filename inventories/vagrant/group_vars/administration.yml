@@ -1,0 +1,11 @@
+---
+
+# Ich habe passowrd mit mkpasswd --method=sha-512 Befehl verschlüsselt, und dann hashed string hier gelegt, weil Ansible nur mit Hashed password funkionert "abc123".
+user_name: raman
+user_password: $6$y5evVzIlplOt$N5pCfgoYast7DrAKb7nExFBmGDx4foNkvUTnWpZNzA.YirwO1Ud31vUmKcsusOrx.cSKLV6rBR7v.GVfPlbPF0
+user_groups: [sudo,users]
+group_name: raman
+
+# wichtige Verzeichnis
+programs_location: "/home/{{user_name}}/programs"
+servers_directory: "{{programs_location}}/servers"
