@@ -3,3 +3,5 @@ roles/basic/files/github/github.pub
 *.retry
 *.iml
 .idea
+vagrant/.vagrant/*
+vagrant/*.log
