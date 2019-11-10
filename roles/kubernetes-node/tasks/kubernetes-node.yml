@@ -42,10 +42,17 @@
    - kubectl
   become: yes
 
+- name: Check if node has already joined
+  stat:
+    path: /etc/kubernetes/kubelet.conf
+  register: stat_result
+
 - name: Copy the join command to server location
   copy: src=/tmp/join-command dest=/tmp/join-command.sh mode=0777
+  when: stat_result.stat.exists == False
 
 - name: Join the node to cluster
   command: sh /tmp/join-command.sh
   become: yes
   notify: Check docker status
+  when: stat_result.stat.exists == False
