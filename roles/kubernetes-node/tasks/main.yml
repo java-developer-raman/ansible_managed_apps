@@ -1,0 +1,9 @@
+---
+
+- import_tasks: kubernetes-node.yml
+  tags: kube-node
+  when: operation == 'install' and ansible_lsb.id == 'Ubuntu'
+
+- import_tasks: uninstall-kubernetes.yml
+  tags: kube-node
+  when: operation == 'un-install'

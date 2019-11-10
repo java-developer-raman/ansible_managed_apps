@@ -1,0 +1,30 @@
+---
+
+- name: Play book to install kubernetes master things
+  hosts: kube_master
+  roles:
+   - role: kubernetes-master
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

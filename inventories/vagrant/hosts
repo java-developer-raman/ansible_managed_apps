@@ -1,5 +1,16 @@
 [softwares]
 raman@192.168.50.11 ansible_ssh_private_key_file=~/.ssh/id_rsa
+raman@192.168.50.12 ansible_ssh_private_key_file=~/.ssh/id_rsa
+raman@192.168.50.13 ansible_ssh_private_key_file=~/.ssh/id_rsa
 
 [administration]
 192.168.50.11
+192.168.50.12
+192.168.50.13
+
+[kube_master]
+raman@192.168.50.11 ansible_ssh_private_key_file=~/.ssh/id_rsa
+
+[kube_nodes]
+raman@192.168.50.12 ansible_ssh_private_key_file=~/.ssh/id_rsa
+raman@192.168.50.13 ansible_ssh_private_key_file=~/.ssh/id_rsa

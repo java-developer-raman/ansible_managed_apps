@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+N = 3
+IMAGE_NAME = "ubuntu/xenial64"
 Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |vb|
@@ -10,40 +12,79 @@ Vagrant.configure("2") do |config|
      # Customize the amount of memory on the VM:
      vb.memory = "2048"
      vb.cpus = 2
-   end
+  end
 
-  config.vm.define "kubernetes-master" do |master|
-    master.vm.box = "ubuntu/xenial64"
-    master.vm.network "private_network", ip: "192.168.50.11"
-    master.vm.hostname = "kubernetes-master"
-    # Setting up user which will be used for installing softwares
-    master.vm.provision "ansible" do |ansible|
-        ansible.playbook = "../site.yml"
-        ansible.limit = "administration"
-        ansible.inventory_path = "../inventories/vagrant"
-        ansible.extra_vars = {
-            operation: "setup",
-            node_ip: "192.168.50.11",
-        }
-        ansible.tags = ["user"]
-        # ansible.ask_become_pass = true
-        ansible.ask_vault_pass = true
-    end
-    # Installing necessary softwares
-    master.vm.provision "ansible" do |ansible|
-        ansible.playbook = "../site.yml"
-        ansible.limit = "softwares"
-        # Uncomment it to debug ansible
-        # ansible.verbose = "vvv"
-        ansible.inventory_path = "../inventories/vagrant"
-        ansible.extra_vars = {
-            operation: "install",
-            node_ip: "192.168.50.11",
-            ansible_user: "raman",
-        }
-        ansible.tags = ["vim","dnsutils","git","java","docker","kube-master"]
-        ansible.ask_become_pass = true
-        ansible.ask_vault_pass = true
+  ANSIBLE_RAW_SSH_ARGS = []
+  VAGRANT_VM_PROVIDER = "virtualbox"
+  (1..N-1).each do |machine_id|
+    ANSIBLE_RAW_SSH_ARGS << "-o IdentityFile=.vagrant/machines/kube-node-#{machine_id}/#{VAGRANT_VM_PROVIDER}/private_key"
+  end
+
+  (1..N).each do |i|
+    config.vm.define "kube-node-#{i}" do |node|
+        node.vm.box = IMAGE_NAME
+        node.vm.network "private_network", ip: "192.168.50.#{i + 10}"
+        if i == 1
+            node.vm.hostname = "kubernetes-master"
+        else
+            node.vm.hostname = "kubernetes-node#{i}"
+        end
+
+        if i == N
+            # Set up user and directories on all nodes
+            node.vm.provision "ansible" do |ansible|
+                ansible.playbook = "../admin-playbook.yml"
+                ansible.limit = "administration"
+                ansible.inventory_path = "../inventories/vagrant"
+                ansible.extra_vars = {
+                    operation: "setup",
+                }
+                ansible.tags = ["user"]
+                ansible.ask_vault_pass = true
+                ansible.raw_ssh_args = ANSIBLE_RAW_SSH_ARGS
+            end
+
+            # Install basic softwares on all nodes
+            node.vm.provision "ansible" do |ansible|
+                ansible.playbook = "../mandatory-softwares-playbook.yml"
+                ansible.limit = "softwares"
+                ansible.inventory_path = "../inventories/vagrant"
+                ansible.extra_vars = {
+                    operation: "install",
+                    ansible_user: "raman",
+                }
+                ansible.tags = ["vim","dnsutils","git","java","docker"]
+                ansible.ask_vault_pass = true
+                ansible.ask_become_pass = true
+            end
+
+            # Install and configure kubernetes master node
+            node.vm.provision "ansible" do |ansible|
+                ansible.playbook = "../kube-master-softwares-playbook.yml"
+                ansible.limit = "kube_master"
+                ansible.inventory_path = "../inventories/vagrant"
+                ansible.extra_vars = {
+                    operation: "install",
+                    ansible_user: "raman",
+                    node_ip: "192.168.50.11",
+                }
+                ansible.tags = ["kube-master"]
+                ansible.ask_become_pass = true
+            end
+
+            # Install and configure normal kubernetes nodes
+            node.vm.provision "ansible" do |ansible|
+                ansible.playbook = "../kube-node-softwares-playbook.yml"
+                ansible.limit = "kube_nodes"
+                ansible.inventory_path = "../inventories/vagrant"
+                ansible.extra_vars = {
+                    operation: "install",
+                    ansible_user: "raman",
+                }
+                ansible.tags = ["kube-node"]
+                ansible.ask_become_pass = true
+            end
+        end
     end
   end
 end

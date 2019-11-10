@@ -1,5 +1,5 @@
 ---
-- import_playbook: admin.yml
+- import_playbook: admin-playbook.yml
   when: operation == 'setup' or operation == 'drop'
-- import_playbook: softwares.yml
+- import_playbook: mandatory-softwares-playbook.yml
   when: operation == 'install' or operation == 'un-install' or operation == 'verify'

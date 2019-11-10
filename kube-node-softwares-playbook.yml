@@ -1,0 +1,30 @@
+---
+
+- name: Play book to install kubernetes node things
+  hosts: kube_nodes
+  roles:
+   - role: kubernetes-node
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
