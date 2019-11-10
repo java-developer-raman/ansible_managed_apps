@@ -42,9 +42,14 @@
    - kubectl
   become: yes
 
+- name: Check if kubernetes is initailized
+  shell: kubectl cluster-info | grep "Kubernetes master"
+  register: grep_output
+
 - name: Initialize the Kubernetes cluster using kubeadm
   command: kubeadm init --apiserver-advertise-address="{{node_ip}}" --apiserver-cert-extra-sans="{{node_ip}}"  --node-name kube-master --pod-network-cidr=10.244.0.0/16
   become: yes
+  when: grep_output.stdout == ""
 
 - name: Setup kubeconfig fuer normales User
   command: "{{ item }}"
