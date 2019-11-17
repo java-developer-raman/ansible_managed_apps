@@ -33,9 +33,9 @@ Vagrant.configure("2") do |config|
         if i == N
             # Set up user and directories on all nodes
             node.vm.provision "ansible" do |ansible|
-                ansible.playbook = "../admin-playbook.yml"
+                ansible.playbook = "../ansible/admin-playbook.yml"
                 ansible.limit = "administration"
-                ansible.inventory_path = "../inventories/vagrant"
+                ansible.inventory_path = "../ansible/inventories/vagrant"
                 ansible.extra_vars = {
                     operation: "setup",
                 }
@@ -46,9 +46,9 @@ Vagrant.configure("2") do |config|
 
             # Install basic softwares on all nodes
             node.vm.provision "ansible" do |ansible|
-                ansible.playbook = "../mandatory-softwares-playbook.yml"
+                ansible.playbook = "../ansible/mandatory-softwares-playbook.yml"
                 ansible.limit = "softwares"
-                ansible.inventory_path = "../inventories/vagrant"
+                ansible.inventory_path = "../ansible/inventories/vagrant"
                 ansible.extra_vars = {
                     operation: "install",
                     ansible_user: "raman",
@@ -60,9 +60,9 @@ Vagrant.configure("2") do |config|
 
             # Install and configure kubernetes master node
             node.vm.provision "ansible" do |ansible|
-                ansible.playbook = "../kube-master-softwares-playbook.yml"
+                ansible.playbook = "../ansible/kube-master-softwares-playbook.yml"
                 ansible.limit = "kube_master"
-                ansible.inventory_path = "../inventories/vagrant"
+                ansible.inventory_path = "../ansible/inventories/vagrant"
                 ansible.extra_vars = {
                     operation: "install",
                     ansible_user: "raman",
@@ -74,9 +74,9 @@ Vagrant.configure("2") do |config|
 
             # Install and configure normal kubernetes nodes
             node.vm.provision "ansible" do |ansible|
-                ansible.playbook = "../kube-node-softwares-playbook.yml"
+                ansible.playbook = "../ansible/kube-node-softwares-playbook.yml"
                 ansible.limit = "kube_nodes"
-                ansible.inventory_path = "../inventories/vagrant"
+                ansible.inventory_path = "../ansible/inventories/vagrant"
                 ansible.extra_vars = {
                     operation: "install",
                     ansible_user: "raman",

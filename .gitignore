@@ -1,6 +1,6 @@
-roles/basic/files/github/github
-roles/basic/files/github/github.pub
-*.retry
+./ansible/roles/basic/files/github/github
+./ansible/roles/basic/files/github/github.pub
+ansible/*.retry
 *.iml
 .idea
 vagrant/.vagrant/*
