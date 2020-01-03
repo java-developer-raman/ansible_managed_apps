@@ -69,6 +69,11 @@ spec:
           hostPath:
             type: File
             path: /home/raman/programs/servers/host.properties
+      # Before starting actual container, this init container will check if the host containing vault server and database available
+      initContainers:
+        - name: check-db-and-vault-host-availability
+          image: busybox:1.31.1
+          command: ['sh', '-c', 'for i in {1..20}; do sleep 1; if ping -c1 192.168.2.108 &>/dev/null; then exit 0; fi; done; echo "Host 192.168.2.108 not available"; exit 1;']
       containers:
         - name: config-server
           image: ramansharma/config-server:v1.0.0
