@@ -40,3 +40,13 @@
    group: "{{group_name}}"
    state: directory
 
+- name: Create host properties required for containerized applications
+  template: src=host.tpl dest="{{servers_directory}}/host.properties" owner="{{user_name}}" group="{{group_name}}" mode=0444
+
+- name: "Einfügen Sie env in ~/.bashrc"
+  lineinfile:
+    path: "/home/{{user_name}}/.bashrc"
+    regexp: '^export env='
+    line: "export env={{env}}"
+    backup: yes
+    insertafter: EOF

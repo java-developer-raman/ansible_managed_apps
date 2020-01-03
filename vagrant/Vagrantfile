@@ -53,7 +53,7 @@ Vagrant.configure("2") do |config|
                     operation: "install",
                     ansible_user: "raman",
                 }
-                ansible.tags = ["vim","dnsutils","git","java","docker", "einwohner", "config-server"]
+                ansible.tags = ["vim","dnsutils","git","docker", "einwohner", "config-server"]
                 ansible.ask_vault_pass = true
                 ansible.ask_become_pass = true
             end
@@ -65,11 +65,11 @@ Vagrant.configure("2") do |config|
                 ansible.inventory_path = "../ansible/inventories/vagrant"
                 ansible.extra_vars = {
                     operation: "install",
-                    ansible_user: "raman",
-                    node_ip: "192.168.50.11",
+                    ansible_user: "raman"
                 }
                 ansible.tags = ["kube-master"]
                 ansible.ask_become_pass = true
+                ansible.ask_vault_pass = true
             end
 
             # Install and configure normal kubernetes nodes

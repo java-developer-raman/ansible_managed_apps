@@ -1,8 +1,10 @@
+#node_ip variable is required for kubernetes to work properly
+
 [softwares]
-#raman@192.168.2.108
+#raman@192.168.2.108 node_ip=192.168.2.108
 #127.0.0.1 ansible_connection=local
-raman@192.168.2.124
-raman@192.168.2.125
+raman@192.168.2.124 node_ip=192.168.2.124
+raman@192.168.2.125 node_ip=192.168.2.125
 
 [administration]
 osboxes@192.168.2.124

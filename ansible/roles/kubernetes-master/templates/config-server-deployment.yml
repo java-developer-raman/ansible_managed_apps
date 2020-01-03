@@ -1,0 +1,125 @@
+# kubectl create -f config-server-deployment.yml
+# kubectl create -f config-server-deployment.yml --namespace=dev (Create repilcaset in dev namespace)
+# kubectl get deployments
+apiVersion: v1
+kind: Secret
+metadata:
+  name: config-server-secrets
+type: Opaque
+stringData:
+  encrypt-password: {{ encrypt_password }}
+  encrypt-secret: {{ encrypt_secret }}
+  ssl-key-store-password: {{ ssl_key_store_password }}
+  ssl-trust-store-password: {{ ssl_trust_store_password }}
+  vault-key-store-password: {{ vault_key_store_password }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-server
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8888
+      targetPort: 8888
+  selector:
+    app.kubernetes.io/name: config-server
+    app.kubernetes.io/component: centralized-configuration-map
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-server-service
+spec:
+  type: NodePort
+  ports:
+    - port: 8888
+      nodePort: 30008
+      targetPort: 8888
+  selector:
+    app.kubernetes.io/name: config-server
+    app.kubernetes.io/component: centralized-configuration-map
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-server-deployment
+  labels:
+    app.kubernetes.io/name: config-server-deployment
+    app.kubernetes.io/version: 1.0.0
+spec:
+  template:
+    metadata:
+      name: config-server
+      labels:
+        app.kubernetes.io/name: config-server
+        app.kubernetes.io/version: 1.0.0
+        app.kubernetes.io/component: centralized-configuration-map
+    spec:
+      restartPolicy: Always
+      volumes:
+        - name: config-server-secrets
+          secret:
+            secretName: config-server-secrets
+        - name: application-logs
+          hostPath:
+            type: Directory
+            path: /home/raman/programs/servers/app-logs/config-server
+        - name: host-properties
+          hostPath:
+            type: File
+            path: /home/raman/programs/servers/host.properties
+      containers:
+        - name: config-server
+          image: ramansharma/config-server:v1.0.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: env
+              value: dev
+          resources:
+            limits:
+              memory: "400M"
+              cpu: "1"
+            requests:
+              memory: "200M"
+              cpu: "0.5"
+          volumeMounts:
+            - name: host-properties
+              mountPath: /home/config-server/host/host.properties
+              readOnly: true
+            - name: application-logs
+              mountPath: /home/config-server/app-logs
+              readOnly: false
+            - name: config-server-secrets
+              mountPath: "/home/config-server/secrets"
+              readOnly: true
+          readinessProbe:
+            exec:
+              command:
+                - /bin/ash
+                - /home/config-server/check-if-healthy.sh
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+            failureThreshold: 5
+          livenessProbe:
+            exec:
+              command:
+                - /bin/ash
+                - /home/config-server/check-if-healthy.sh
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+            failureThreshold: 5
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: helper-node
+                    operator: Exists
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: config-server
+#kubectl delete service/config-server-service
+#kubectl delete service/config-server
+#kubectl delete deployment/config-server-deployment

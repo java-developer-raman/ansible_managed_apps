@@ -4,7 +4,7 @@
 - name: "Erstellt Configuration Directory, wenn nicht da"
   file:
     path: "{{app_conf_home}}"
-    mode: 0700
+    mode: 0777
     owner: "{{user_name}}"
     group: "{{group_name}}"
     state: directory
@@ -12,7 +12,7 @@
 - name: "Erstellt logs Directory, wenn nicht da"
   file:
     path: "{{app_logs_home}}"
-    mode: 0700
+    mode: 0777
     owner: "{{user_name}}"
     group: "{{group_name}}"
     state: directory

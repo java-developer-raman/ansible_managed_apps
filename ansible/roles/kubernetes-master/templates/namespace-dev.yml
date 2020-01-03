@@ -1,0 +1,7 @@
+# kubectl create -f namespace-dev.yml
+# To switch permanently to dev, so that we can fire commands without namespace
+# kubectl config set-context $(kubectl config current-context) --namespace=dev
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev

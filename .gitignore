@@ -1,5 +1,4 @@
-./ansible/roles/basic/files/github/github
-./ansible/roles/basic/files/github/github.pub
+ansible/roles/basic/files/github/*
 ansible/*.retry
 *.iml
 .idea

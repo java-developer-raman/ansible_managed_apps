@@ -47,6 +47,11 @@
     path: /etc/kubernetes/kubelet.conf
   register: stat_result
 
+# this step is necessary for virtual boxes created via vagrant
+- name: Copy kubelet file
+  template: src=kubelet.tmpl dest="/etc/default/kubelet"
+  become: yes
+
 - name: Copy the join command to server location
   copy: src=/tmp/join-command dest=/tmp/join-command.sh mode=0777
   when: stat_result.stat.exists == False

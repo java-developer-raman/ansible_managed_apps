@@ -9,8 +9,8 @@ raman@192.168.50.13 ansible_ssh_private_key_file=~/.ssh/id_rsa
 192.168.50.13
 
 [kube_master]
-raman@192.168.50.11 ansible_ssh_private_key_file=~/.ssh/id_rsa
+raman@192.168.50.11 ansible_ssh_private_key_file=~/.ssh/id_rsa node_ip=192.168.50.11
 
 [kube_nodes]
-raman@192.168.50.12 ansible_ssh_private_key_file=~/.ssh/id_rsa
-raman@192.168.50.13 ansible_ssh_private_key_file=~/.ssh/id_rsa
+raman@192.168.50.12 ansible_ssh_private_key_file=~/.ssh/id_rsa node_ip=192.168.50.12
+raman@192.168.50.13 ansible_ssh_private_key_file=~/.ssh/id_rsa node_ip=192.168.50.13

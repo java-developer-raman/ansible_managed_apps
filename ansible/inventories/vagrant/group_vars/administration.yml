@@ -5,6 +5,7 @@ user_name: raman
 user_password: $6$y5evVzIlplOt$N5pCfgoYast7DrAKb7nExFBmGDx4foNkvUTnWpZNzA.YirwO1Ud31vUmKcsusOrx.cSKLV6rBR7v.GVfPlbPF0
 user_groups: [sudo,users]
 group_name: raman
+env: dev
 
 # wichtige Verzeichnis
 programs_location: "/home/{{user_name}}/programs"
