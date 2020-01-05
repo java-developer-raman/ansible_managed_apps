@@ -50,7 +50,9 @@
 
 # This step will initialize kubelet configuration
 - name: Initialize the Kubernetes cluster using kubeadm
-  command: kubeadm init --apiserver-advertise-address="{{node_ip}}" --apiserver-cert-extra-sans="{{node_ip}}"  --node-name kube-master --pod-network-cidr=10.244.0.0/16
+  #command: kubeadm init --apiserver-advertise-address="{{node_ip}}" --apiserver-cert-extra-sans="{{node_ip}}"  --node-name kube-master --pod-network-cidr=10.244.0.0/16
+  # If this command does not work, then remove it and uncomment above command. This is just an experiment to enable preset.
+  command: kubeadm init --runtime-config=settings.k8s.io/v1alpha1=true --enable-admission-plugins=NodeRestriction,PodPreset --apiserver-advertise-address="{{node_ip}}" --apiserver-cert-extra-sans="{{node_ip}}"  --node-name kube-master --pod-network-cidr=10.244.0.0/16
   become: yes
   when: stat_result.stat.exists == False
 

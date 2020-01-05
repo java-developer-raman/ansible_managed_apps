@@ -1,0 +1,32 @@
+apiVersion: settings.k8s.io/v1alpha1
+kind: PodPreset
+metadata:
+  name: shared-db-host
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/shared-db-host: true
+  env:
+    - name: DB_HOST
+      value: 192.168.2.108
+
+---
+
+apiVersion: settings.k8s.io/v1alpha1
+kind: PodPresetsettings.k8s.io/v1alpha1
+metadata:
+  name: shared-volume
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/shared-volume: true
+  volumeMounts:
+    - name: host-properties
+      mountPath: /home/config-server/host/host.properties
+      readOnly: true
+  volumes:
+    - name: host-properties
+      hostPath:
+        type: File
+        path: /home/raman/programs/servers/host.properties
+

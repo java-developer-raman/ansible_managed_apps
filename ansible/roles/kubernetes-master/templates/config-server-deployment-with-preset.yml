@@ -1,6 +1,25 @@
 # kubectl create -f config-server-deployment.yml
 # kubectl create -f config-server-deployment.yml --namespace=dev (Create repilcaset in dev namespace)
 # kubectl get deployments
+##################################### Know Issues with preset ###########################
+# I tried enabling pod preset in k8 cluster. But it did not work. Did not get much help also on google
+# So for the time being will go with simple approach.
+# Steps tried
+# 1. Changed file /etc/kubernetes/manifests/kube-apiserver.yaml
+#    with following information
+#    - kube-apiserver
+#    - --advertise-address=192.168.50.11
+#    - --runtime-config=settings.k8s.io/v1alpha1=true
+#    - --allow-privileged=true
+#    - --authorization-mode=Node,RBAC
+#    - --client-ca-file=/etc/kubernetes/pki/ca.crt
+#    - --enable-admission-plugins=NodeRestriction,PodPreset
+# 2. Delete the pod kubectl delete pod kube-apiserver-kube-master --namespace=kube-system
+# 3. It was recreated but still podpreset did not work
+# 4. kubectl get podpreset returned with error
+
+# Will try next time during initialization of k8 cluster using kubeadm init
+#############################################################################
 apiVersion: v1
 kind: Secret
 metadata:
@@ -53,6 +72,8 @@ spec:
       name: config-server
       labels:
         app.kubernetes.io/name: config-server
+        app.kubernetes.io/shared-volume: true
+        app.kubernetes.io/shared-db-host: true
         app.kubernetes.io/version: 1.0.0
         app.kubernetes.io/component: centralized-configuration-map
     spec:
@@ -65,17 +86,10 @@ spec:
           hostPath:
             type: Directory
             path: /home/raman/programs/servers/app-logs/config-server
-        - name: host-properties
-          hostPath:
-            type: File
-            path: /home/raman/programs/servers/host.properties
       # Before starting actual container, this init container will check if the host containing vault server and database available
       initContainers:
         - name: check-db-and-vault-host-availability
           image: busybox:1.31.1
-          env:
-            - name: DB_HOST
-              value: 192.168.2.108
           command: ['/bin/sh']
           args: ['-c', 'for i in {1..20}; do sleep 1; if ping -c1 $DB_HOST &>/dev/null; then exit 0; fi; done; echo "Host $DB_HOST not available"; exit 1;']
       containers:
@@ -90,9 +104,6 @@ spec:
               memory: "200M"
               cpu: "0.1"
           volumeMounts:
-            - name: host-properties
-              mountPath: /home/config-server/host/host.properties
-              readOnly: true
             - name: application-logs
               mountPath: /home/config-server/app-logs
               readOnly: false
