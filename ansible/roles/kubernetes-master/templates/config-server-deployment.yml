@@ -61,10 +61,9 @@ spec:
         - name: config-server-secrets
           secret:
             secretName: config-server-secrets
-        - name: application-logs
-          hostPath:
-            type: Directory
-            path: /home/raman/programs/servers/app-logs/config-server
+        - name: config-server-logs
+          persistentVolumeClaim:
+            claimName: pvc-logs
         - name: host-properties
           hostPath:
             type: File
@@ -93,9 +92,10 @@ spec:
             - name: host-properties
               mountPath: /home/config-server/host/host.properties
               readOnly: true
-            - name: application-logs
+            - name: config-server-logs
               mountPath: /home/config-server/app-logs
               readOnly: false
+              subPath: config-server
             - name: config-server-secrets
               mountPath: "/home/config-server/secrets"
               readOnly: true
