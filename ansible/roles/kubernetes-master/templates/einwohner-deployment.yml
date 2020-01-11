@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: einwohner-secret
+type: Opaque
+stringData:
+  config-server.properties: |-
+    config.server.url=https://config-server:8888
+    config.server.user=admin
+    config.server.password=admin
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: einwohner-deployment
+  labels:
+    app.kubernetes.io/name: einwohner-deployment
+    app.kubernetes.io/version: 1.0.0
+spec:
+  template:
+    metadata:
+      name: einwohner
+      labels:
+        app.kubernetes.io/name: einwohner
+        app.kubernetes.io/version: 1.0.0
+        app.kubernetes.io/component: backend
+    spec:
+      restartPolicy: Always
+      volumes:
+        - name: einwohner-config
+          secret:
+            secretName: einwohner-secret
+            defaultMode: 0600
+        - name: einwohner-server-logs
+          persistentVolumeClaim:
+            claimName: pvc-logs
+        - name: host-properties
+          hostPath:
+            type: File
+            path: /home/raman/programs/servers/host.properties
+      initContainers:
+        - name: check-db-host-availability
+          image: busybox:1.31.1
+          env:
+            - name: DB_HOST
+              value: 192.168.2.109
+          command: ['/bin/sh']
+          args: ['-c', 'for i in {1..20}; do sleep 1; if ping -c1 $DB_HOST &>/dev/null; then exit 0; fi; done; echo "Host $DB_HOST not available"; exit 1;']
+      containers:
+        - name: einwohner
+          image: ramansharma/einwohnertomcat:v1.0.0
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: "1024M"
+              cpu: "1"
+            requests:
+              memory: "500M"
+              cpu: "0.5"
+          volumeMounts:
+            - name: host-properties
+              mountPath: /usr/local/tomcat/conf/host/host.properties
+              readOnly: true
+            - name: einwohner-server-logs
+              mountPath: /home/config-server/app-logs
+              readOnly: false
+              subPath: einwohner
+            - name: einwohner-config
+              mountPath: /usr/local/tomcat/app-conf/config-server.properties
+              readOnly: true
+              subPath: config-server.properties
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - /usr/local/tomcat/bin/check-if-healthy.sh
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              scheme: https
+              path: /einwohner/rest/anwendungs-info
+              port: 8443
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+            failureThreshold: 5
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: einwohner
