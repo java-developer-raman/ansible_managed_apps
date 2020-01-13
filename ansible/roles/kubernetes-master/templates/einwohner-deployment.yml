@@ -31,7 +31,7 @@ spec:
         - name: einwohner-config
           secret:
             secretName: einwohner-secret
-            defaultMode: 0600
+            defaultMode: 0666
         - name: einwohner-server-logs
           persistentVolumeClaim:
             claimName: pvc-logs
@@ -75,15 +75,15 @@ spec:
               command:
                 - /bin/sh
                 - /usr/local/tomcat/bin/check-if-healthy.sh
-            initialDelaySeconds: 30
+            initialDelaySeconds: 180
             timeoutSeconds: 1
             failureThreshold: 5
           livenessProbe:
             httpGet:
-              scheme: https
+              scheme: HTTPS
               path: /einwohner/rest/anwendungs-info
               port: 8443
-            initialDelaySeconds: 30
+            initialDelaySeconds: 180
             timeoutSeconds: 1
             failureThreshold: 5
   replicas: 1

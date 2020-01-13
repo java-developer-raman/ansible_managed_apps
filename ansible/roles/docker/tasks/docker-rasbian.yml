@@ -1,17 +1,17 @@
 ---
 
-- name: Herunterladen docker script
+- name: Herunterladen docker script on rasberry pi
   get_url:
    url: 'https://get.docker.com/'
    dest: "{{herunterladen_file}}"
    mode: 0744
 
-- name: install docker
+- name: install docker on rasberry pi
   shell: "{{herunterladen_file}}"
   become: yes
   become_method: sudo
 
-- name: Remove temporary file
+- name: Remove temporary file on rasberry pi
   file:
     path: "{{herunterladen_file}}"
     state: absent

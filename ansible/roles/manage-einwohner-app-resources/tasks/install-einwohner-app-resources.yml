@@ -20,7 +20,4 @@
 # Step 2: Copy Certifikat und keystore
 # Step 3: Executing templates und copy neue file
 - name: Create config-server.properties.tpl
-  template: src=config-server.properties.tpl dest="{{app_conf_home}}/config-server.properties" mode=0400
-
-- name: Create server-einwohner.xml.tpl
-  template: src=server-einwohner.xml.tpl dest="{{app_conf_home}}/server-einwohner.xml" mode=0400
+  template: src=config-server.properties.tpl dest="{{app_conf_home}}/config-server.properties" mode=0666
