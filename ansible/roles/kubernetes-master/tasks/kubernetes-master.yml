@@ -97,10 +97,10 @@
   when: stat_result.stat.exists == False
 
 - name: Copy Config server deployment file
-  template: src=config-server-deployment.yml dest="{{apps_directory}}/config-server/config-server-deployment.yml"
+  template: src=config-server/config-server-deployment.yml dest="{{apps_directory}}/config-server/config-server-deployment.yml"
 
 - name: Copy config-server-deployment-with-preset.yml
-  template: src=config-server-deployment-with-preset.yml dest="{{apps_directory}}/config-server/config-server-deployment-with-preset.ymll"
+  template: src=config-server/config-server-deployment-with-preset.yml dest="{{apps_directory}}/config-server/config-server-deployment-with-preset.ymll"
 
 - name: Copy pvc-logs file
   template: src=pvc-logs.yml dest="{{apps_directory}}/pvc-logs.yml"
@@ -112,4 +112,4 @@
   template: src=filebeat-daemonset.yml dest="{{apps_directory}}/filebeat-daemonset.yml"
 
 - name: Copy einwohner-deployment
-  template: src=einwohner-deployment.yml dest="{{apps_directory}}/einwohner/einwohner-deployment.yml"
+  template: src=einwohner/einwohner-deployment.yml dest="{{apps_directory}}/einwohner/einwohner-deployment.yml"

@@ -6,8 +6,8 @@ type: Opaque
 stringData:
   config-server.properties: |-
     config.server.url=https://config-server:8888
-    config.server.user=admin
-    config.server.password=admin
+    config.server.user={{config.server.user}}
+    config.server.password={{config.server.password}}
 
 ---
 apiVersion: apps/v1
