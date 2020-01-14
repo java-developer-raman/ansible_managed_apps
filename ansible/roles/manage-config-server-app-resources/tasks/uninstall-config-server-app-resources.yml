@@ -3,3 +3,8 @@
   file:
     path: "{{host_config_server_logs_dir}}"
     state: absent
+
+- name: "Loeschen wir einwohner apps_directory/config-server directory von system"
+  file:
+    path: "{{apps_directory}}/config-server"
+    state: absent

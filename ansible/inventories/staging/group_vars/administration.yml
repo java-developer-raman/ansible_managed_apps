@@ -9,3 +9,4 @@ env: dev
 # wichtige Verzeichnis
 programs_location: "/home/{{user_name}}/programs"
 servers_directory: "{{programs_location}}/servers"
+apps_directory: "{{servers_directory}}/apps"

@@ -40,6 +40,14 @@
    group: "{{group_name}}"
    state: directory
 
+- name: "Erstellt apps_directory"
+  file:
+    path: "{{apps_directory}}"
+    mode: 0744
+    owner: "{{user_name}}"
+    group: "{{group_name}}"
+    state: directory
+
 - name: Create host properties required for containerized applications
   template: src=host.tpl dest="{{servers_directory}}/host.properties" owner="{{user_name}}" group="{{group_name}}" mode=0444
 

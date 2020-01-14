@@ -9,6 +9,7 @@ herunterladen_folder: /tmp
 # wichtige Verzeichnis
 programs_location: "/home/{{user_name}}/programs"
 servers_directory: "{{programs_location}}/servers"
+apps_directory: "{{servers_directory}}/apps"
 
 # Java propertiesjdk-8u231.tar.gz
 herunterladen_java_linux_x64_url: https://download.oracle.com/otn/java/jdk/8u231-b11/5b13a193868b4bf28bcb45c792fce896/jdk-8u231-linux-x64.tar.gz

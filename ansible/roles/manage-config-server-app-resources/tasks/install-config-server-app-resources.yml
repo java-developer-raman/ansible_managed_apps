@@ -8,3 +8,11 @@
     owner: "{{user_name}}"
     group: "{{group_name}}"
     state: directory
+
+- name: "Erstellt config-server Directory, wenn nicht da"
+  file:
+    path: "{{apps_directory}}/config-server"
+    mode: 0777
+    owner: "{{user_name}}"
+    group: "{{group_name}}"
+    state: directory

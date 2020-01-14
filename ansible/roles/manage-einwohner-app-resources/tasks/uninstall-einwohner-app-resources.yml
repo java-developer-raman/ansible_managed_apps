@@ -9,3 +9,8 @@
   file:
     path: "{{app_logs_home}}"
     state: absent
+
+- name: "Loeschen wir einwohner apps_directory/einwohner directory von system"
+  file:
+    path: "{{apps_directory}}/einwohner"
+    state: absent

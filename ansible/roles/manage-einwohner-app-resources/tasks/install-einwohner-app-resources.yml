@@ -17,6 +17,14 @@
     group: "{{group_name}}"
     state: directory
 
+- name: "Erstellt einwohner Directory, wenn nicht da"
+  file:
+    path: "{{apps_directory}}/einwohner"
+    mode: 0777
+    owner: "{{user_name}}"
+    group: "{{group_name}}"
+    state: directory
+
 # Step 2: Copy Certifikat und keystore
 # Step 3: Executing templates und copy neue file
 - name: Create config-server.properties.tpl
