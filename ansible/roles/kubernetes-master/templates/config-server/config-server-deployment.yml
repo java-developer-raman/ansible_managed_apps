@@ -12,6 +12,7 @@ stringData:
   ssl-key-store-password: {{ ssl_key_store_password }}
   ssl-trust-store-password: {{ ssl_trust_store_password }}
   vault-key-store-password: {{ vault_key_store_password }}
+
 ---
 apiVersion: v1
 kind: Service
@@ -25,20 +26,7 @@ spec:
   selector:
     app.kubernetes.io/name: config-server
     app.kubernetes.io/component: centralized-configuration-map
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: config-server-service
-spec:
-  type: NodePort
-  ports:
-    - port: 8888
-      nodePort: 30008
-      targetPort: 8888
-  selector:
-    app.kubernetes.io/name: config-server
-    app.kubernetes.io/component: centralized-configuration-map
+
 ---
 apiVersion: apps/v1
 kind: Deployment
