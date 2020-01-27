@@ -1,0 +1,8 @@
+---
+# Tags can be used to execute a specific task e.g. ansible-playbook -i inventories/staging site.yml --tags dnsutils --ask-sudo-pass --extra-vars "operation=install"
+# Here the task execution will be dependent upon operation i.e. if operation is install, install task will be executed and another one will be skipped
+
+- name: "Un Installing NFS Client"
+  apt: pkg=nfs-common state=absent
+  become: yes
+  become_method: sudo

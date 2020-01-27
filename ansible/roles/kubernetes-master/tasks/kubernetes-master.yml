@@ -111,5 +111,14 @@
 - name: Copy filebeat-daemonset
   template: src=filebeat-daemonset.yml dest="{{apps_directory}}/filebeat-daemonset.yml"
 
+- name: Copy MySQL DB service file
+  template: src=mysql-db-service.yml dest="{{apps_directory}}/mysql-db-service.yml"
+
+- name: Copy Vault service file
+  template: src=vault-service.yml dest="{{apps_directory}}/vault-service.yml"
+
+- name: Copy ingress file
+  template: src=ingress.yml dest="{{apps_directory}}/ingress.yml"
+
 - name: Copy einwohner-deployment
   template: src=einwohner/einwohner-deployment.yml dest="{{apps_directory}}/einwohner/einwohner-deployment.yml"

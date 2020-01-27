@@ -23,3 +23,11 @@
 - import_tasks: uninstall-git.yml
   tags: git
   when: operation == 'un-install' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: nfs-client.yml
+  tags: nfs-client
+  when: operation == 'install' and ansible_facts['os_family'] == 'Debian'
+
+- import_tasks: uninstall-nfs-client.yml
+  tags: nfs-client
+  when: operation == 'un-install' and ansible_facts['os_family'] == 'Debian'
