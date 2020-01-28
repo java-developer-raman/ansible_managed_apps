@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-logs
+spec:
+  # It means volume will be mounted for read and write mode on a multiple nodes
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs
+  capacity:
+    storage: 1Gi
+  nfs:
+    server: 192.168.2.102
+    path: /mnt/nfs-shared
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-logs
+spec:
+  storageClassName: nfs
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi

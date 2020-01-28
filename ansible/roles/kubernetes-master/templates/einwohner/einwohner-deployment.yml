@@ -78,7 +78,7 @@ spec:
               mountPath: /usr/local/tomcat/conf/host/host.properties
               readOnly: true
             - name: einwohner-server-logs
-              mountPath: /home/config-server/app-logs
+              mountPath: /usr/local/tomcat/app-logs
               readOnly: false
               subPath: einwohner
             - name: einwohner-config
